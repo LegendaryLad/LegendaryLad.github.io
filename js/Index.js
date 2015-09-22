@@ -4,3 +4,4 @@ if (r == true) {
 } else {
     x = "Better.";
 }
+document.getElementById("demo").innerHTML = x;
