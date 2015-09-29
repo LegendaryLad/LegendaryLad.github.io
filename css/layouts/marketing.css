@@ -96,7 +96,7 @@ a.pure-button-primary {
     box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
 }
 .home-menu {
-    background: #ffffff;
+    background: #303636;
 }
 .pure-menu.pure-menu-fixed {
     /* Fixed menus normally have a border at the bottom. */
@@ -106,17 +106,17 @@ a.pure-button-primary {
 }
 
 .home-menu .pure-menu-heading {
-    color: black;
+    color: white;
     font-weight: 400;
     font-size: 120%;
 }
 
 .home-menu .pure-menu-selected a {
-    color: white;
+    color: black;
 }
 
 .home-menu a {
-    color: #6FBEF3;
+    color: white;
 }
 .home-menu li a:hover,
 .home-menu li a:focus {
@@ -211,13 +211,14 @@ a.pure-button-primary {
 
 /* This is the class used for the dark-background areas. */
 .ribbon {
-    background: #2d3e50;
+    background: #303636;
     color: #aaa;
 }
 
 /* This is the class used for the footer */
 .footer {
-    background: #111;
+    background: #303636;
+    font-size: 50%
 }
 
 /*
