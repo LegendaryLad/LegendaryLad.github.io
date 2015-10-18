@@ -96,7 +96,7 @@ a.pure-button-primary {
     box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
 }
 .home-menu {
-     background-image: url("../../img/common/SlateBack2.JPG");
+     background-image: url("..\..\img\common\SlateBack2.JPG");
 }
 .pure-menu.pure-menu-fixed {
     /* Fixed menus normally have a border at the bottom. */
