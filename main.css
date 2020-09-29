@@ -48,6 +48,10 @@ a:hover {
   text-decoration: none;
 }
 
+img {
+  max-width: 100%;
+}
+
 .clearfix::after {
   content: "";
   display: table;
