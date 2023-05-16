@@ -41,7 +41,7 @@
       display: none;
     }
     
-    .submenu li:hover ul {
+    .submenu li:hover > ul {
       display: block;
     }
     
@@ -49,21 +49,41 @@
       top: 0;
       left: -100%;
     }
+    
+    .submenu ul li {
+      position: relative;
+    }
+    
+    .submenu ul ul {
+      top: 0;
+      left: -100%;
+    }
+    
+    .submenu ul li:hover > ul {
+      display: block;
+    }
   </style>
 </head>
 <body>
   <!-- HTML for the spiraling drop-down menu -->
   <div class="menu">
-    <a href="#">Imaginary</a>
+    <a href="#">Menu Item 1</a>
     <div class="submenu">
-      <a href="#">Solutions</a>
+      <a href="#">Submenu Item 1</a>
       <a href="#">Submenu Item 2</a>
       <a href="#">Submenu Item 3</a>
       <ul>
         <li>
           <a href="#">Submenu Item 4</a>
           <ul>
-            <li><a href="#">Submenu Item 6</a></li>
+            <li>
+              <a href="#">Submenu Item 6</a>
+              <ul>
+                <li><a href="#">Submenu Item 9</a></li>
+                <li><a href="#">Submenu Item 10</a></li>
+                <li><a href="#">Submenu Item 11</a></li>
+              </ul>
+            </li>
             <li><a href="#">Submenu Item 7</a></li>
             <li><a href="#">Submenu Item 8</a></li>
           </ul>
@@ -74,6 +94,5 @@
   </div>
 </body>
 </html>
-
 
 
