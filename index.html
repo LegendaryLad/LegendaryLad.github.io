@@ -28,6 +28,26 @@
     .menu:hover .submenu {
       display: block;
     }
+    
+    .submenu li {
+      position: relative;
+    }
+    
+    .submenu ul {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      display: none;
+    }
+    
+    .submenu li:hover ul {
+      display: block;
+    }
+    
+    .submenu ul ul {
+      top: 0;
+      left: -100%;
+    }
   </style>
 </head>
 <body>
@@ -38,11 +58,21 @@
       <a href="#">Submenu Item 1</a>
       <a href="#">Submenu Item 2</a>
       <a href="#">Submenu Item 3</a>
+      <ul>
+        <li>
+          <a href="#">Submenu Item 4</a>
+          <ul>
+            <li><a href="#">Submenu Item 6</a></li>
+            <li><a href="#">Submenu Item 7</a></li>
+            <li><a href="#">Submenu Item 8</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Submenu Item 5</a></li>
+      </ul>
     </div>
   </div>
 </body>
 </html>
-
 
 
 
