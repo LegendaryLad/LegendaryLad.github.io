@@ -1,80 +1,40 @@
 <!DOCTYPE html>
-<html>
-<head>
- <title>Imaginary Solutions</title>
+<html lang="en" style class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+    <head>
+        <title>Imaginary Solutions</title>
         <link rel="icon" href="/img/common/favicon.ico">
-  <style>
-    body {
-      text-align: center;
-    }
-    
-    .menu {
-      display: inline-block;
-      position: relative;
-      margin-top: 100px;
-    }
-    
-    .submenu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background-color: #f9f9f9;
-      padding: 10px;
-      border: 1px solid #ccc;
-      z-index: 1;
-    }
-    
-    .subsubmenu {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 100%;
-      background-color: #f9f9f9;
-      padding: 10px;
-      border: 1px solid #ccc;
-      z-index: 1;
-    }
-    
-    .subsubsubmenu {
-      display: none;
-      position: absolute;
-      top: -100%;
-      left: 0;
-      background-color: #f9f9f9;
-      padding: 10px;
-      border: 1px solid #ccc;
-      z-index: 1;
-    }
-    
-     .subsubsubsubmenu {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: -80%;
-      background-color: #f9f9f9;
-      padding: 10px;
-      border: 1px solid #ccc;
-      z-index: 1;
-    }
-    
-    .menu:hover .submenu {
-      display: block;
-    }
-    
-    .submenu:hover .subsubmenu {
-      display: block;
-    }
-    
-     .subsubmenu:hover .subsubsubmenu {
-      display: block;
-    }
-    
-    .subsubsubmenu:hover .subsubsubsubmenu {
-      display: block;
-    }
-  </style>
-</head>
+
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/img/common/icon/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/img/common/icon/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/img/common/icon/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/common/icon/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/img/common/icon/apple-touch-icon-60x60.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/img/common/icon/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/img/common/icon/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/img/common/icon/apple-touch-icon-152x152.png" />
+        <link rel="icon" type="image/png" href="/img/common/icon/favicon-196x196.png" sizes="196x196" />
+        <link rel="icon" type="image/png" href="/img/common/icon/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/png" href="/img/common/icon/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/img/common/icon/favicon-16x16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/img/common/icon/favicon-128.png" sizes="128x128" />
+        <meta name="application-name" content="&nbsp;"/>
+        <meta name="msapplication-TileColor" content="#FFFFFF" />
+        <meta name="msapplication-TileImage" content="/img/common/icon/mstile-144x144.png" />
+        <meta name="msapplication-square70x70logo" content="/img/common/icon/mstile-70x70.png" />
+        <meta name="msapplication-square150x150logo" content="/img/common/icon/mstile-150x150.png" />
+        <meta name="msapplication-wide310x150logo" content="/img/common/icon/mstile-310x150.png" />
+        <meta name="msapplication-square310x310logo" content="/img/common/icon/mstile-310x310.png" />
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+        <!-- CSS -->
+        <link href="/main.css" rel="stylesheet">
+        <!-- JS -->
+        <script src="/js/vendor/modernizr-2.8.3.min.js"></script>
+        <script src="/js/vendor/jquery-1.12.0.min.js"></script>
+    </head>
 <body>
   <!-- HTML for the spiraling drop-down menu -->
   <div class="menu">
