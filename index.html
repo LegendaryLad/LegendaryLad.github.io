@@ -1,78 +1,48 @@
 <!DOCTYPE html>
-<html lang="en" style class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
-    <head>
-        <title>Imaginary Solutions</title>
-        
-        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/img/common/icon/apple-touch-icon-57x57.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/img/common/icon/apple-touch-icon-114x114.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/img/common/icon/apple-touch-icon-72x72.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/common/icon/apple-touch-icon-144x144.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/img/common/icon/apple-touch-icon-60x60.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/img/common/icon/apple-touch-icon-120x120.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/img/common/icon/apple-touch-icon-76x76.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/img/common/icon/apple-touch-icon-152x152.png" />
-        <link rel="icon" type="image/png" href="/img/common/icon/favicon-196x196.png" sizes="196x196" />
-        <link rel="icon" type="image/png" href="/img/common/icon/favicon-96x96.png" sizes="96x96" />
-        <link rel="icon" type="image/png" href="/img/common/icon/favicon-32x32.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="/img/common/icon/favicon-16x16.png" sizes="16x16" />
-        <link rel="icon" type="image/png" href="/img/common/icon/favicon-128.png" sizes="128x128" />
-        <meta name="application-name" content="&nbsp;"/>
-        <meta name="msapplication-TileColor" content="#FFFFFF" />
-        <meta name="msapplication-TileImage" content="/img/common/icon/mstile-144x144.png" />
-        <meta name="msapplication-square70x70logo" content="/img/common/icon/mstile-70x70.png" />
-        <meta name="msapplication-square150x150logo" content="/img/common/icon/mstile-150x150.png" />
-        <meta name="msapplication-wide310x150logo" content="/img/common/icon/mstile-310x150.png" />
-        <meta name="msapplication-square310x310logo" content="/img/common/icon/mstile-310x310.png" />
-
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-
-        <!-- CSS -->
-        <link href="/main.css" rel="stylesheet">
-
-        <!-- JS -->
-        <script src="/js/vendor/modernizr-2.8.3.min.js"></script>
-        <script src="/js/vendor/jquery-1.12.0.min.js"></script>
-    </head>
-    <body>
-        <div class="site" id="page">
-            <a class="skip-link sr-only" href="#main">Skip to content</a>
-
-            <!-- Options headline effects: .rotate | .slide | .zoom | .push | .clip -->
-            <section class="hero-section hero-section--image clearfix clip">
-                <div class="hero-section__wrap">
-                    <div class="hero-section__option">
-                        <img src="/img/common/white-wallpaper-1920x1080-3D-Black-white-Spiral-1920x1080.jpg" alt="Hero section image">
-                    </div>
-                    <!-- .hero-section__option -->
-
-                    <div class="container">
-                        <div class="row">
-                            <div class="offset-lg-2 col-lg-8">
-                                <div class="title-01 title-01--11 text-center">
-                                    <h2 class="title__heading">
-                                        <strong class="hero-section__words">
-                                            <span class="title__effect is-visible">Imaginary Solutions</span>
-                                            <span class="title__effect">Inexact Science</span>
-                                            <span class="title__effect">Unsimulated Freedom</span>
-                                        </strong>
-                                    </h2>
-                                    <div class="title__description">The past is out to pasture for now <br>The present remains present<br>The future is on the way.</div>
-
-                                    <!-- Options btn color: .btn-success | .btn-info | .btn-warning | .btn-danger | .btn-primary -->
-                                    <div class="title__action"><a href="mailto:alpha@imaginary.solutions" class="btn btn-success">Connect the Dots</a></div>
-                                </div> <!-- .title-01 -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-        
-        <!-- JS -->
-        <script src="/js/plugins/animate-headline.js"></script>
-        <script src="/js/main.js"></script>
-    </body>
+<html>
+<head>
+  <title>Spiraling Drop-Down Menu</title>
+  <style>
+    /* CSS for the spiraling drop-down menu */
+    body {
+      text-align: center;
+    }
+    
+    .menu {
+      display: inline-block;
+      position: relative;
+      margin-top: 100px;
+    }
+    
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ccc;
+      z-index: 1;
+    }
+    
+    .menu:hover .submenu {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- HTML for the spiraling drop-down menu -->
+  <div class="menu">
+    <a href="#">Menu Item 1</a>
+    <div class="submenu">
+      <a href="#">Submenu Item 1</a>
+      <a href="#">Submenu Item 2</a>
+      <a href="#">Submenu Item 3</a>
+    </div>
+  </div>
+</body>
 </html>
+
+
+
+
