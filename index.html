@@ -5,93 +5,72 @@
         <link rel="icon" href="/img/common/favicon.ico">
   <style>
     /* CSS for the spiraling drop-down menu */
-    body {
-      text-align: center;
+    body #nav {
+    list-style:none inside;
+    margin:0;
+    padding:0;
+    text-align:center;
     }
-    
-    .menu {
-      display: inline-block;
-      position: relative;
-      margin-top: 100px;
+
+#nav li {
+    display:block;
+    position:relative;
+    float:left;
+    background: #006633; /* menu background color */
     }
-    
-    .submenu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background-color: #f9f9f9;
-      padding: 10px;
-      border: 1px solid #ccc;
-      z-index: 1;
+
+#nav li a {
+    display:block;
+    padding:0;
+    text-decoration:none;
+    width:200px; /* this is the width of the menu items */
+    line-height:35px; /* this is the hieght of the menu items */
+    color:#ffffff; /* list item font color */
     }
+        
+#nav li li a {font-size:80%;} /* smaller font size for sub menu items */
     
-    .menu:hover .submenu {
-      display: block;
+#nav li:hover {background:#003f20;} /* highlights current hovered list item and the parent list items when hovering over sub menues */
+
+
+
+/*--- Sublist Styles ---*/
+#nav ul {
+    position:absolute;
+    padding:0;
+    left:0;
+    display:none; /* hides sublists */
     }
-    
-    .submenu li {
-      position: relative;
-    }
-    
-    .submenu ul {
-      position: absolute;
-      top: 0;
-      left: 100%;
-      display: none;
-    }
-    
-    .submenu li:hover > ul {
-      display: block;
-    }
-    
-    .submenu ul ul {
-      top: 0;
-      left: -100%;
-    }
-    
-    .submenu ul li {
-      position: relative;
-    }
-    
-    .submenu ul ul {
-      top: 0;
-      left: -100%;
-    }
-    
-    .submenu ul li:hover > ul {
-      display: block;
+
+#nav li:hover ul ul {display:none;} /* hides sub-sublists */
+
+#nav li:hover ul {display:block;} /* shows sublist on hover */
+
+#nav li li:hover ul {
+    display:block; /* shows sub-sublist on hover */
+    margin-left:200px; /* this should be the same width as the parent list item */
+    margin-top:-35px; /* aligns top of sub menu with top of list item */
     }
   </style>
 </head>
 <body>
   <!-- HTML for the spiraling drop-down menu -->
-  <div class="menu">
-    <a href="#">Menu Item 1</a>
-    <div class="submenu">
-      <a href="#">Submenu Item 1</a>
-      <a href="#">Submenu Item 2</a>
-      <a href="#">Submenu Item 3</a>
-      <ul>
-        <li>
-          <a href="#">Submenu Item 4</a>
-          <ul>
-            <li>
-              <a href="#">Submenu Item 6</a>
-              <ul>
-                <li><a href="#">Submenu Item 9</a></li>
-                <li><a href="#">Submenu Item 10</a></li>
-                <li><a href="#">Submenu Item 11</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Submenu Item 7</a></li>
-            <li><a href="#">Submenu Item 8</a></li>
-          </ul>
-        </li>
-        <li><a href="#">Submenu Item 5</a></li>
-      </ul>
-    </div>
-  </div>
+ <ul id="nav">
+  <li><a href="#">Main Item 1</a></li>
+  <li><a href="#">Main Item 2</a>
+    <ul>
+      <li><a href="#">Sub Item</a></li>
+      <li><a href="#">Sub Item</a></li>
+      <li><a href="#">SUB SUB LIST &raquo;</a>
+        <ul>
+          <li><a href="#">Sub Sub Item 1</a>
+          <li><a href="#">Sub Sub Item 2</a>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#">Main Item 3</a></li>
+</ul>
 </body>
 </html>
 
