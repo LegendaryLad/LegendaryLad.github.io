@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spiraling Drop-Down Menu</title>
+  <style>
+    /* CSS for the spiraling drop-down menu */
+    body {
+      text-align: center;
+    }
+    
+    .menu {
+      display: inline-block;
+      position: relative;
+      margin-top: 100px;
+    }
+    
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ccc;
+      z-index: 1;
+    }
+    
+    .menu:hover .submenu {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- HTML for the spiraling drop-down menu -->
+  <div class="menu">
+    <a href="#">Menu Item 1</a>
+    <div class="submenu">
+      <a href="#">Submenu Item 1</a>
+      <a href="#">Submenu Item 2</a>
+      <a href="#">Submenu Item 3</a>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
