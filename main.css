@@ -2590,3 +2590,70 @@ xclip
   padding: 10px 15px;
   font-size: 8px;
 }
+
+
+
+    .menu {
+      display: inline-block;
+      position: relative;
+      margin-top: 100px;
+    }
+    
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ccc;
+      z-index: 1;
+    }
+    
+    .subsubmenu {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 100%;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ccc;
+      z-index: 1;
+    }
+    
+    .subsubsubmenu {
+      display: none;
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ccc;
+      z-index: 1;
+    }
+    
+     .subsubsubsubmenu {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: -80%;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ccc;
+      z-index: 1;
+    }
+    
+    .menu:hover .submenu {
+      display: block;
+    }
+    
+    .submenu:hover .subsubmenu {
+      display: block;
+    }
+    
+     .subsubmenu:hover .subsubsubmenu {
+      display: block;
+    }
+    
+    .subsubsubmenu:hover .subsubsubsubmenu {
+      display: block;
