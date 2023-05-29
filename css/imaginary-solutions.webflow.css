@@ -336,7 +336,7 @@
 .margin-bottom-24px {
   width: auto;
   text-align: left;
-  text-shadow: 1px -1px 1px rgba(0, 0, 0, .2);
+  text-shadow: 1px 0 1px rgba(0, 0, 0, .2);
   object-fit: fill;
   margin-bottom: 24px;
   font-family: Bitter, serif;
