@@ -317,6 +317,7 @@
 .body-2 {
   cursor: auto;
   background-color: #fff;
+  background-image: radial-gradient(circle, #000, #fff);
 }
 
 .link-block {
@@ -336,11 +337,12 @@
   height: 100vh;
   cursor: auto;
   background-color: rgba(0, 0, 0, 0);
-  background-image: radial-gradient(circle, #000, gray 61%, #fff), linear-gradient(#000, #fff);
+  background-image: none;
   border: 1px #000;
-  padding: 2% 30px 0%;
+  padding: 0% 30px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
   position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
 }
 
 .container-3 {
@@ -354,6 +356,7 @@
   justify-content: flex-start;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 80px;
   display: block;
   position: static;
 }
@@ -510,6 +513,14 @@
   background-size: contain;
 }
 
+.containertarot.tarot15 {
+  background-image: url('../images/Devil_v3.png');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-attachment: scroll;
+}
+
 .containertarot.tarot6 {
   background-image: url('../images/00_Cones_Ace.png');
   background-position: 50%;
@@ -519,7 +530,7 @@
 
 .heading {
   text-align: center;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
+  font-family: Urbanist, sans-serif;
 }
 
 .team-slider {
@@ -876,7 +887,7 @@
   color: #000;
   margin-top: 0;
   margin-bottom: 0;
-  font-family: Geologica, sans-serif;
+  font-family: Space Grotesk, sans-serif;
   font-size: .875rem;
   font-weight: 400;
   line-height: 1.5;
@@ -954,6 +965,7 @@
   min-width: 100vw;
   background-color: #fff;
   border-bottom: 1px solid #000;
+  border-radius: 20px;
   padding-left: 5%;
   padding-right: 5%;
   position: absolute;
@@ -965,6 +977,7 @@
 }
 
 .rl_navbar5_link-text {
+  color: #000;
   font-family: Urbanist, sans-serif;
   font-size: 1.2rem;
 }
@@ -1035,17 +1048,25 @@
 }
 
 .rl_navbar5_component {
-  width: 100%;
+  width: 96%;
   min-height: 4.5rem;
   background-color: rgba(255, 255, 255, .77);
   border: 1px #000;
   border-radius: 20px;
+  justify-content: flex-start;
   align-items: center;
+  margin-top: 15px;
   margin-left: 0;
+  margin-right: 0;
   padding-bottom: 0;
   padding-left: 5%;
   padding-right: 5%;
   display: flex;
+  position: fixed;
+  top: 0%;
+  bottom: auto;
+  left: 2%;
+  right: 2%;
 }
 
 .div-block {
@@ -1076,6 +1097,7 @@
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: contain;
+  align-self: center;
   margin-top: 22px;
 }
 
@@ -1096,9 +1118,67 @@
   color: #fff;
   text-align: center;
   white-space: normal;
-  font-family: Ysabeau, sans-serif;
-  font-size: 28px;
+  font-family: Space Grotesk, sans-serif;
+  font-size: 23px;
+  font-weight: 400;
   line-height: 28px;
+}
+
+.button-3 {
+  -webkit-text-fill-color: inherit;
+  object-fit: fill;
+  background-color: #000;
+  background-clip: border-box;
+  border: 1px #000;
+  border-radius: 20px;
+  align-self: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-family: Urbanist, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  position: static;
+  box-shadow: -7px 7px 3px rgba(254, 254, 254, .2);
+}
+
+.button-4 {
+  background-color: #000;
+  border-radius: 20px;
+  flex: 0 auto;
+  align-self: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-family: Urbanist, sans-serif;
+  font-size: 28px;
+  box-shadow: 7px 7px 3px rgba(255, 255, 255, .2);
+}
+
+.cell-3 {
+  padding-left: 25%;
+}
+
+.cell-4 {
+  padding-right: 25%;
+}
+
+.link {
+  color: red;
+  font-family: Urbanist, sans-serif;
+  font-size: 50px;
+  font-weight: 400;
+}
+
+.rl_navbar5_item-titlee-sealed {
+  color: red;
+  font-family: Space Grotesk, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.body-4, .body-5 {
+  background-image: radial-gradient(circle, #000, #fff);
 }
 
 @media screen and (max-width: 991px) {
@@ -1309,6 +1389,7 @@
     background-color: #fff;
     background-clip: border-box;
     border-bottom: 1px solid #000;
+    border-radius: 20px;
     align-items: flex-start;
     margin-left: 0;
     padding: 1rem 5% 15rem;
@@ -1420,6 +1501,10 @@
     grid-auto-columns: 1fr;
   }
 
+  .rl_navbar5_menu {
+    border-radius: 20px;
+  }
+
   .rl_navbar5_component {
     min-height: 4rem;
   }
@@ -1503,6 +1588,10 @@
     padding-bottom: 1rem;
   }
 
+  .rl_navbar5_menu {
+    border-radius: 20px;
+  }
+
   .div-block {
     margin-left: auto;
     margin-right: auto;
@@ -1527,14 +1616,59 @@
   grid-area: span 2 / span 1 / span 2 / span 1;
 }
 
-#w-node-_7dd053bb-a575-7dc4-9a61-0a74716a8fc8-183c4014 {
+#w-node-_7dd053bb-a575-7dc4-9a61-0a74716a8fc8-183c4014, #w-node-_41380e71-dd91-d943-06d6-f27cd0ce0670-4a590c3e {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+}
+
+#w-node-_41380e71-dd91-d943-06d6-f27cd0ce0696-4a590c3e {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+}
+
+#w-node-_41380e71-dd91-d943-06d6-f27cd0ce0697-4a590c3e {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+}
+
+#w-node-_41380e71-dd91-d943-06d6-f27cd0ce06ab-4a590c3e {
+  grid-area: span 2 / span 1 / span 2 / span 1;
+}
+
+#w-node-_41380e71-dd91-d943-06d6-f27cd0ce06cf-4a590c3e {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+}
+
+#w-node-_602bb550-0f70-f4c4-c043-2d674f8ae590-4a590c3e {
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr;
+}
+
+#w-node-_602bb550-0f70-f4c4-c043-2d674f8ae591-4a590c3e, #w-node-_602bb550-0f70-f4c4-c043-2d674f8ae592-4a590c3e, #w-node-d05c15f7-2fb4-50dc-7f2f-8f6bc4b416d7-2b22102c {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+}
+
+#w-node-d05c15f7-2fb4-50dc-7f2f-8f6bc4b416fd-2b22102c {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+}
+
+#w-node-d05c15f7-2fb4-50dc-7f2f-8f6bc4b416fe-2b22102c {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+}
+
+#w-node-d05c15f7-2fb4-50dc-7f2f-8f6bc4b41712-2b22102c {
+  grid-area: span 2 / span 1 / span 2 / span 1;
+}
+
+#w-node-d05c15f7-2fb4-50dc-7f2f-8f6bc4b41736-2b22102c {
   grid-area: span 1 / span 1 / span 1 / span 1;
 }
 
 
 @font-face {
   font-family: 'Nt Seawave Standart Personal Use';
-  src: url('../fonts/NT-SEAWAVE-standart---PERSONAL-USE.otf') format('opentype');
+  src: url('../fonts/NT-SEAWAVE-standart---PERSONAL-USE.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
