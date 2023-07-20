@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  -->
-<!--  Last Published: Wed Jul 12 2023 17:03:26 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Thu Jul 20 2023 19:51:55 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6473640c4eeb1ff94a590c3e" data-wf-site="646f9a55ddae60eede3874d2">
 <head>
   <meta charset="utf-8">
@@ -24,7 +24,7 @@
   <section class="hero-stack wf-section">
     <div fs-scrolldisable-element="smart-nav" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="rl_navbar5_component w-nav">
       <div class="rl_navbar5_container">
-        <a href="marginary.html" class="rl_navbar5_logo-link w-nav-brand"><img src="images/ImaginarySolutions.png" loading="lazy" width="214" sizes="(max-width: 479px) 70vw, 213.99307250976562px" srcset="images/ImaginarySolutions-p-500.png 500w, images/ImaginarySolutions-p-800.png 800w, images/ImaginarySolutions-p-1080.png 1080w, images/ImaginarySolutions-p-1600.png 1600w, images/ImaginarySolutions.png 2799w" alt="" class="rl_navbar5_logo"></a>
+        <a href="marginary.html" class="rl_navbar5_logo-link w-nav-brand"><img src="images/ImaginarySolutions.png" loading="lazy" width="214" sizes="(max-width: 479px) 70vw, 214px" srcset="images/ImaginarySolutions-p-500.png 500w, images/ImaginarySolutions-p-800.png 800w, images/ImaginarySolutions-p-1080.png 1080w, images/ImaginarySolutions-p-1600.png 1600w, images/ImaginarySolutions.png 2799w" alt="" class="rl_navbar5_logo"></a>
         <nav role="navigation" class="rl_navbar5_menu w-nav-menu">
           <div class="rl_navbar5_menu-left">
             <div data-hover="true" data-delay="300" data-w-id="41380e71-dd91-d943-06d6-f27cd0ce061d" class="rl_navbar5_menu-dropdown w-dropdown">
@@ -219,6 +219,14 @@
 function delay (URL) {
 setTimeout( function() { window.location = URL }, 1111 );
 }
+</script>
+  <script>
+var Webflow = Webflow || [];
+Webflow.push(function() {
+	window.addEventListener('resize', function() {
+	    window.Webflow.require("lottie").lottie.resize();
+	});	
+});
 </script>
 </body>
 </html>

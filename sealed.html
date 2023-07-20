@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  -->
-<!--  Last Published: Wed Jul 12 2023 17:03:26 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Thu Jul 20 2023 19:51:55 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6482006e4f9d9c7b2cf1e145" data-wf-site="646f9a55ddae60eede3874d2">
 <head>
   <meta charset="utf-8">
@@ -33,6 +33,14 @@
 function delay (URL) {
 setTimeout( function() { window.location = URL }, 1111 );
 }
+</script>
+  <script>
+var Webflow = Webflow || [];
+Webflow.push(function() {
+	window.addEventListener('resize', function() {
+	    window.Webflow.require("lottie").lottie.resize();
+	});	
+});
 </script>
 </body>
 </html>
