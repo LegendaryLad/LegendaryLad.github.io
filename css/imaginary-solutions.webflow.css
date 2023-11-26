@@ -1,3 +1,9 @@
+:root {
+  --relume-library-lite-rl-white: white;
+  --relume-library-lite-rl-black: black;
+  --relume-library-lite-rl-gray: #f4f4f4;
+}
+
 .w-layout-layout {
   grid-row-gap: 20px;
   grid-column-gap: 20px;
@@ -331,8 +337,8 @@
 }
 
 .body-2 {
+  background-color: var(--relume-library-lite-rl-white);
   cursor: auto;
-  background-color: #fff;
   background-image: radial-gradient(circle, #000, #fff);
 }
 
@@ -392,7 +398,7 @@
 
 .margin-bottom-24px {
   width: auto;
-  color: #fff;
+  color: var(--relume-library-lite-rl-white);
   text-align: left;
   object-fit: fill;
   margin-bottom: 24px;
@@ -699,7 +705,8 @@
 
 .rl_navbar5_button {
   height: auto;
-  color: #fff;
+  border: 1px none var(--relume-library-lite-rl-black);
+  color: var(--relume-library-lite-rl-white);
   text-align: center;
   -webkit-text-fill-color: inherit;
   background-color: rgba(0, 0, 0, 0);
@@ -708,7 +715,6 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-clip: border-box;
-  border: 1px #000;
   justify-content: flex-start;
   margin-top: 0;
   padding: 2rem 4rem;
@@ -721,10 +727,10 @@
 }
 
 .rl_navbar5_button-secondary {
-  color: #000;
+  border: 1px solid var(--relume-library-lite-rl-black);
+  color: var(--relume-library-lite-rl-black);
   text-align: center;
   background-color: rgba(0, 0, 0, 0);
-  border: 1px solid #000;
   padding: .5rem 1.25rem;
   font-family: Urbanist, sans-serif;
   font-size: 1rem;
@@ -749,7 +755,7 @@
 
 .rl_navbar5_dropdown-background-layer {
   min-width: 100vw;
-  background-color: #f4f4f4;
+  background-color: var(--relume-library-lite-rl-gray);
   position: absolute;
   top: 0%;
   bottom: 0%;
@@ -769,10 +775,10 @@
 .rl-button-link {
   grid-column-gap: .5rem;
   grid-row-gap: .5rem;
-  color: #000;
+  border: 1px none var(--relume-library-lite-rl-black);
+  color: var(--relume-library-lite-rl-black);
   text-align: center;
   background-color: rgba(0, 0, 0, 0);
-  border: 1px #000;
   padding: .25rem 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
   font-size: 1rem;
@@ -790,7 +796,7 @@
 }
 
 .rl_navbar5_item-link {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-top: 0;
   margin-bottom: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
@@ -806,7 +812,7 @@
 }
 
 .rl-text-style-small {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-top: 0;
   margin-bottom: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
@@ -876,7 +882,7 @@
 }
 
 .rl_navbar5_dropdown-column-text {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-top: 0;
   margin-bottom: 0;
   font-family: Space Grotesk, sans-serif;
@@ -907,7 +913,7 @@
 }
 
 .rl_navbar5_text-small {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-top: 0;
   margin-bottom: 0;
   font-family: Space Grotesk, sans-serif;
@@ -1022,7 +1028,7 @@
 }
 
 .rl_navbar5_dropdown-toggle {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   padding: 1.5rem 2.5rem 1.5rem 1rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
   font-size: 1rem;
@@ -1036,7 +1042,7 @@
 }
 
 .rl_navbar5_link {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   padding: 1.5rem 1rem;
   font-family: Urbanist, sans-serif;
   font-size: 1.2rem;
@@ -1141,7 +1147,7 @@
 }
 
 .paragraph-2 {
-  color: #fff;
+  color: var(--relume-library-lite-rl-white);
   text-align: center;
   white-space: normal;
   font-family: Space Grotesk, sans-serif;
@@ -1168,7 +1174,7 @@
 }
 
 .button-4 {
-  background-color: #000;
+  background-color: var(--relume-library-lite-rl-black);
   border-radius: 20px;
   flex: 0 auto;
   align-self: center;
@@ -1195,7 +1201,7 @@
 }
 
 .rl_navbar5_item-titlee-sealed {
-  color: red;
+  color: #000;
   font-family: Space Grotesk, sans-serif;
   font-size: 1rem;
   font-weight: 600;
@@ -1473,20 +1479,20 @@
 }
 
 .rl-button-secondary {
-  color: #000;
+  border: 1px solid var(--relume-library-lite-rl-black);
+  background-color: var(--relume-library-lite-rl-white);
+  color: var(--relume-library-lite-rl-black);
   text-align: center;
-  background-color: #fff;
-  border: 1px solid #000;
   padding: .75rem 1.5rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
   font-size: 1rem;
 }
 
 .rl-button {
-  color: #fff;
+  border: 1px solid var(--relume-library-lite-rl-black);
+  background-color: var(--relume-library-lite-rl-black);
+  color: var(--relume-library-lite-rl-white);
   text-align: center;
-  background-color: #000;
-  border: 1px solid #000;
   padding: .75rem 1.5rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
   font-size: 1rem;
@@ -1507,7 +1513,7 @@
 }
 
 .rl-text-style-medium {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-top: 0;
   margin-bottom: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
@@ -1522,7 +1528,7 @@
 }
 
 .rl-heading-style-h1 {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-top: 0;
   margin-bottom: 0;
   font-family: Urbanist, sans-serif;
@@ -1568,7 +1574,7 @@
 }
 
 .rl_section_header62 {
-  background-color: #fff;
+  background-color: var(--relume-library-lite-rl-white);
 }
 
 .rl-error-text {
@@ -1601,14 +1607,14 @@
 }
 
 .rl-text-style-link {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
   font-weight: 400;
   text-decoration: underline;
 }
 
 .rl-checkbox-label-small {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-bottom: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
   font-size: .875rem;
@@ -1621,8 +1627,8 @@
   height: 1.125rem;
   min-height: 1.125rem;
   min-width: 1.125rem;
+  border: 1px solid var(--relume-library-lite-rl-black);
   cursor: pointer;
-  border: 1px solid #000;
   border-radius: 0;
   margin-top: 0;
   margin-left: -1.25rem;
@@ -1631,16 +1637,16 @@
 }
 
 .rl-form-checkbox-icon.w--redirected-checked {
-  box-shadow: none;
-  background-color: #000;
-  background-size: 16px 16px;
   border-width: 1px;
-  border-color: #000;
+  border-color: var(--relume-library-lite-rl-black);
+  background-color: var(--relume-library-lite-rl-black);
+  box-shadow: none;
+  background-size: 16px 16px;
 }
 
 .rl-form-checkbox-icon.w--redirected-focus {
+  border-color: var(--relume-library-lite-rl-black);
   box-shadow: none;
-  border-color: #000;
 }
 
 .rl-form-checkbox {
@@ -1653,9 +1659,9 @@
 .rl-form-text-area {
   height: auto;
   min-height: 11.25rem;
-  color: #000;
-  background-color: #fff;
-  border: 1px solid #000;
+  border: 1px solid var(--relume-library-lite-rl-black);
+  background-color: var(--relume-library-lite-rl-white);
+  color: var(--relume-library-lite-rl-black);
   margin-bottom: 0;
   padding: .75rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
@@ -1666,19 +1672,19 @@
 }
 
 .rl-form-text-area:focus {
-  border-color: #000;
+  border-color: var(--relume-library-lite-rl-black);
 }
 
 .rl-form-text-area::-ms-input-placeholder {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
 }
 
 .rl-form-text-area::placeholder {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
 }
 
 .rl-field-label {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-bottom: .5rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
   font-size: 1rem;
@@ -1692,9 +1698,9 @@
 .rl-form-input {
   height: auto;
   min-height: 2.75rem;
-  color: #000;
-  background-color: #fff;
-  border: 1px solid #000;
+  border: 1px solid var(--relume-library-lite-rl-black);
+  background-color: var(--relume-library-lite-rl-white);
+  color: var(--relume-library-lite-rl-black);
   margin-bottom: 0;
   padding: .5rem .75rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
@@ -1704,16 +1710,16 @@
 }
 
 .rl-form-input:focus {
-  border-color: #000;
+  border-color: var(--relume-library-lite-rl-black);
 }
 
 .rl-form-input::-ms-input-placeholder {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   font-size: 1rem;
 }
 
 .rl-form-input::placeholder {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   font-size: 1rem;
 }
 
@@ -1745,7 +1751,7 @@
 }
 
 .rl-heading-style-h2 {
-  color: #000;
+  color: var(--relume-library-lite-rl-black);
   margin-top: 0;
   margin-bottom: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Oxygen, Fira Sans, Droid Sans, sans-serif;
@@ -1777,7 +1783,7 @@
 }
 
 .rl_section_contact1 {
-  background-color: #fff;
+  background-color: var(--relume-library-lite-rl-white);
 }
 
 .body-7 {
