@@ -1,12 +1,5 @@
-diff --git a//dev/null b/SearchLedger/index.html
-index 0000000000000000000000000000000000000000..f8f316bec18e9e314e9cb031c23c7769c233462f 100644
---- a//dev/null
-+++ b/SearchLedger/index.html
-@@ -0,0 +1,2607 @@
-+<!DOCTYPE html>
-+<html lang="en">
-+<head>
-+    <meta charset="UTF-8">
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            <p class="text-sm">ERNST UNDING</p>
 +    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 +    <title>The Ledger</title>
 +    <script src="https://cdn.tailwindcss.com"></script>
@@ -2510,17 +2503,9 @@ index 0000000000000000000000000000000000000000..f8f316bec18e9e314e9cb031c23c7769
 +                entries.push(activeEntry);
 +            }
 +            
-+            const entry765index = entries.findIndex(e => e.id === "765");
-+            if (entry765index !== -1 && entries[entry765index + 1] && entries[entry765index + 1].id === "765") {
-+                if(entries[entry765index+1].description){
-+                    entries[entry765index].description += (entries[entry765index].description ? " / " : "") + "JORDAN OF DEATH: " + entries[entry765index+1].description;
-+                } else {
-+                    entries[entry765index].description += (entries[entry765index].description ? " / " : "") + "JORDAN OF DEATH";
-+                }
-+                entries[entry765index].title += " / JORDAN OF DEATH";
-+                entries.splice(entry765index + 1, 1);
-+            }
-+
+                let idHTML = entry.id + '.';
+                if (searchTerm && searchRegex) {
+                    idHTML = entry.id.replace(searchRegex, match => `<span class="highlight">${match}</span>`) + '.';
 +            return entries;
 +        }
 +
