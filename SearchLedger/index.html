@@ -31,6 +31,10 @@
         .entry-title {
             font-weight: bold;
         }
+        .entry-title.clickable {
+            cursor: pointer;
+            color: #1d4ed8; /* blue-700 */
+        }
         .entry-description {
             margin-top: 4px;
             font-size: 0.9em;
@@ -48,6 +52,11 @@
             background-color: #ffffff;
             border: 1px solid #000000;
         }
+
+        /* Modal styles */
+        #submissionModal {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body class="bg-white text-black min-h-screen p-4 md:p-8">
@@ -60,8 +69,23 @@
             <input type="text" id="searchInput" placeholder="Search by name or number..." class="w-full p-3 border border-black rounded-md shadow-sm focus:ring-black focus:border-black text-black bg-white">
         </div>
 
+
         <div id="ledgerEntries" class="bg-white p-0 md:p-6 rounded-md">
             <!-- Entries will be dynamically inserted here -->
+        </div>
+
+        <!-- Modal for submissions -->
+        <div id="submissionModal" class="hidden fixed inset-0 items-center justify-center">
+            <div class="bg-white p-6 rounded-md w-11/12 md:w-2/3 lg:w-1/2">
+                <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
+                <p class="mb-2">connect the cubes...</p>
+                <textarea id="storyInput" class="w-full border border-black p-2 mb-4 text-black bg-white" rows="4" placeholder="Your story"></textarea>
+                <div id="previousStories" class="mb-4 text-sm text-gray-700"></div>
+                <div class="flex justify-end space-x-2">
+                    <button id="submitStory" class="bg-black text-white px-4 py-2 rounded">Submit</button>
+                    <button id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded">Close</button>
+                </div>
+            </div>
         </div>
 
         <footer class="text-center mt-12 text-xs text-gray-600">
@@ -2559,8 +2583,9 @@ now
                 idEl.innerHTML = idHTML;
 
                 const titleEl = document.createElement('span');
-                titleEl.className = 'entry-title';
+                titleEl.className = 'entry-title clickable';
                 titleEl.innerHTML = titleHTML;
+                titleEl.addEventListener('click', () => openSubmissionModal(entry.id, entry.title));
                 
                 const headerDiv = document.createElement('div');
                 headerDiv.className = 'flex items-baseline';
@@ -2578,9 +2603,61 @@ now
             });
         }
 
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML;
+        }
+
+        function loadStories() {
+            try {
+                return JSON.parse(localStorage.getItem('ledgerStories') || '{}');
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveStories(stories) {
+            localStorage.setItem('ledgerStories', JSON.stringify(stories));
+        }
+
+        function openSubmissionModal(entryId, entryTitle) {
+            const modal = document.getElementById('submissionModal');
+            modal.dataset.entryId = entryId;
+            document.getElementById('modalTitle').textContent = `${entryId}. ${entryTitle}`;
+
+            const stories = loadStories();
+            const entryStories = stories[entryId] || [];
+            const prev = document.getElementById('previousStories');
+            prev.innerHTML = entryStories.map(s => `<p>- ${escapeHtml(s)}</p>`).join('');
+
+            document.getElementById('storyInput').value = '';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeSubmissionModal() {
+            const modal = document.getElementById('submissionModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             allLedgerEntries = parseLedgerData(pdfFullText);
             displayEntries(allLedgerEntries);
+
+            document.getElementById('closeModal').addEventListener('click', closeSubmissionModal);
+            document.getElementById('submitStory').addEventListener('click', () => {
+                const modal = document.getElementById('submissionModal');
+                const entryId = modal.dataset.entryId;
+                const text = document.getElementById('storyInput').value.trim();
+                if (!text) return;
+                const stories = loadStories();
+                if (!stories[entryId]) stories[entryId] = [];
+                stories[entryId].push(text);
+                saveStories(stories);
+                openSubmissionModal(entryId, document.getElementById('modalTitle').textContent.replace(/^\d+\.\s*/, ''));
+            });
 
             const searchInput = document.getElementById('searchInput');
             searchInput.addEventListener('input', (e) => {
