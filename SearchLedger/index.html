@@ -19,6 +19,10 @@
             border-bottom: 1px solid #cccccc;
             padding-top: 12px;
             padding-bottom: 12px;
+            will-change: transform, opacity;
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+            transform-origin: center;
+            perspective: 800px;
         }
         .ledger-entry:last-child {
             border-bottom: none;
@@ -138,6 +142,35 @@ let allLedgerEntries = [];
                 }
                 container.appendChild(entryDiv);
             });
+            updateLedgerVisuals();
+        }
+
+        function updateLedgerVisuals() {
+            const entries = document.querySelectorAll('.ledger-entry');
+
+            const searchBox = document.getElementById('searchInput');
+            const searchTop = searchBox.getBoundingClientRect().bottom;
+            const searchGone = searchTop <= 0;
+
+            const focusY = searchGone
+                ? window.scrollY + window.innerHeight / 2
+                : window.scrollY + 150;
+
+            entries.forEach(entry => {
+                const rect = entry.getBoundingClientRect();
+                const entryY = rect.top + window.scrollY + rect.height / 2;
+                const distance = Math.abs(entryY - focusY);
+
+                const maxDist = window.innerHeight / 2;
+                const norm = Math.min(distance / maxDist, 1);
+
+                const scale = 1 - 0.25 * norm;
+                const opacity = 1 - 0.6 * norm;
+                const rotate = 12 * norm * (entryY < focusY ? 1 : -1);
+
+                entry.style.transform = `scale(${scale}) rotateX(${rotate}deg)`;
+                entry.style.opacity = opacity;
+            });
         }
 
 
@@ -160,7 +193,11 @@ let allLedgerEntries = [];
                 });
                 displayEntries(filteredEntries, searchTerm);
             });
+            setTimeout(updateLedgerVisuals, 100);
         });
+
+        window.addEventListener('scroll', updateLedgerVisuals);
+        window.addEventListener('resize', updateLedgerVisuals);
 
     </script>
 </body>
