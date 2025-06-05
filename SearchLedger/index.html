@@ -180,10 +180,64 @@ let allLedgerEntries = [];
             localStorage.setItem('ledgerStories', JSON.stringify(stories));
         }
 
+        const GITHUB_CONFIG = {
+            owner: 'LegendaryLad', // Replace with your GitHub username
+            repo: 'LegendaryLad.github.io', // Repository name
+            path: 'SearchLedger/ledger-submissions.json', // File to store submissions
+            branch: 'main', // Branch to update
+            token: '' // Personal access token
+        };
+
+        async function uploadSubmission(entryId, text, timestamp) {
+            const { owner, repo, path, branch, token } = GITHUB_CONFIG;
+            const headers = {
+                'Accept': 'application/vnd.github+json'
+            };
+            if (token) headers['Authorization'] = `token ${token}`;
+
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+            let submissions = {};
+            let sha = undefined;
+            try {
+                const getRes = await fetch(apiUrl, { headers });
+                if (getRes.ok) {
+                    const data = await getRes.json();
+                    sha = data.sha;
+                    submissions = JSON.parse(atob(data.content));
+                }
+            } catch (e) {
+                // ignore fetch errors and start with empty submissions
+            }
+
+            if (!submissions[entryId]) submissions[entryId] = [];
+            submissions[entryId].push({ text, timestamp });
+
+            const body = {
+                message: `Add submission for ${entryId}`,
+                content: btoa(JSON.stringify(submissions, null, 2)),
+                sha,
+                branch
+            };
+
+            try {
+                await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers,
+                    body: JSON.stringify(body)
+                });
+            } catch (e) {
+                console.error('Failed to upload submission', e);
+            }
+        }
+
+
         function openSubmissionModal(entryId, entryTitle) {
             const modal = document.getElementById('submissionModal');
             modal.dataset.entryId = entryId;
-            document.getElementById('modalTitle').textContent = `${entryId}. ${entryTitle}`;
+            modal.dataset.entryTitle = entryTitle;
+            const formattedId = applySubindices(entryId + '.');
+            const formattedTitle = applySubindices(escapeHtml(entryTitle));
+            document.getElementById('modalTitle').innerHTML = `${formattedId} ${formattedTitle}`;
 
             const stories = loadStories();
             const entryStories = stories[entryId] || [];
@@ -209,13 +263,23 @@ let allLedgerEntries = [];
             document.getElementById('submitStory').addEventListener('click', () => {
                 const modal = document.getElementById('submissionModal');
                 const entryId = modal.dataset.entryId;
+                const entryTitle = modal.dataset.entryTitle;
                 const text = document.getElementById('storyInput').value.trim();
                 if (!text) return;
+
                 const stories = loadStories();
                 if (!stories[entryId]) stories[entryId] = [];
                 stories[entryId].push(text);
                 saveStories(stories);
-                openSubmissionModal(entryId, document.getElementById('modalTitle').textContent.replace(/^\d+\.\s*/, ''));
+
+                const date = new Date();
+                const mm = String(date.getMonth() + 1).padStart(2, '0');
+                const dd = String(date.getDate()).padStart(2, '0');
+                const yyyy = date.getFullYear();
+                const timestamp = `${mm}/${dd}/${yyyy}`;
+                uploadSubmission(entryId, text, timestamp);
+
+                openSubmissionModal(entryId, entryTitle);
             });
 
             const searchInput = document.getElementById('searchInput');
