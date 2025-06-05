@@ -33,7 +33,7 @@
         }
         .entry-title.clickable {
             cursor: pointer;
-            color: #1d4ed8; /* blue-700 */
+            color: #000000; /* black */
         }
         .entry-description {
             margin-top: 4px;
@@ -53,10 +53,6 @@
             border: 1px solid #000000;
         }
 
-        /* Modal styles */
-        #submissionModal {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
     </style>
 </head>
 <body class="bg-white text-black min-h-screen p-4 md:p-8">
@@ -74,19 +70,6 @@
             <!-- Entries will be dynamically inserted here -->
         </div>
 
-        <!-- Modal for submissions -->
-        <div id="submissionModal" class="hidden fixed inset-0 items-center justify-center">
-            <div class="bg-white p-6 rounded-md w-11/12 md:w-2/3 lg:w-1/2">
-                <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
-                <p class="mb-2">connect the cubes...</p>
-                <textarea id="storyInput" class="w-full border border-black p-2 mb-4 text-black bg-white" rows="4" placeholder="Your story"></textarea>
-                <div id="previousStories" class="mb-4 text-sm text-gray-700"></div>
-                <div class="flex justify-end space-x-2">
-                    <button id="submitStory" class="bg-black text-white px-4 py-2 rounded">Submit</button>
-                    <button id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded">Close</button>
-                </div>
-            </div>
-        </div>
 
         <footer class="text-center mt-12 text-xs text-gray-600">
             <p>Mendace Veritas</p>
@@ -144,7 +127,10 @@ let allLedgerEntries = [];
                 const titleEl = document.createElement('span');
                 titleEl.className = 'entry-title clickable';
                 titleEl.innerHTML = titleHTML;
-                titleEl.addEventListener('click', () => openSubmissionModal(entry.id, entry.title));
+                titleEl.addEventListener('click', () => {
+                    const url = 'submit.html?id=' + encodeURIComponent(entry.id) + '&title=' + encodeURIComponent(entry.title);
+                    window.location.href = url;
+                });
                 
                 const headerDiv = document.createElement('div');
                 headerDiv.className = 'flex items-baseline';
@@ -164,125 +150,9 @@ let allLedgerEntries = [];
 
 
 
-        function escapeHtml(str) {
-            const div = document.createElement('div');
-            div.innerText = str;
-            return div.innerHTML;
-        }
-
-        function loadStories() {
-            try {
-                return JSON.parse(localStorage.getItem('ledgerStories') || '{}');
-            } catch (e) {
-                return {};
-            }
-        }
-
-        function saveStories(stories) {
-            localStorage.setItem('ledgerStories', JSON.stringify(stories));
-        }
-
-        const GITHUB_CONFIG = {
-            owner: 'LegendaryLad', // Replace with your GitHub username
-            repo: 'LegendaryLad.github.io', // Repository name
-            path: 'SearchLedger/ledger-submissions.json', // File to store submissions
-            branch: 'main', // Branch to update
-            token: '' // Personal access token
-        };
-
-        async function uploadSubmission(entryId, text, timestamp) {
-            const { owner, repo, path, branch, token } = GITHUB_CONFIG;
-            const headers = {
-                'Accept': 'application/vnd.github+json'
-            };
-            if (token) headers['Authorization'] = `token ${token}`;
-
-            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
-            let submissions = {};
-            let sha = undefined;
-            try {
-                const getRes = await fetch(apiUrl, { headers });
-                if (getRes.ok) {
-                    const data = await getRes.json();
-                    sha = data.sha;
-                    submissions = JSON.parse(atob(data.content));
-                }
-            } catch (e) {
-                // ignore fetch errors and start with empty submissions
-            }
-
-            if (!submissions[entryId]) submissions[entryId] = [];
-            submissions[entryId].push({ text, timestamp });
-
-            const body = {
-                message: `Add submission for ${entryId}`,
-                content: btoa(JSON.stringify(submissions, null, 2)),
-                sha,
-                branch
-            };
-
-            try {
-                await fetch(apiUrl, {
-                    method: 'PUT',
-                    headers,
-                    body: JSON.stringify(body)
-                });
-            } catch (e) {
-                console.error('Failed to upload submission', e);
-            }
-        }
-
-
-        function openSubmissionModal(entryId, entryTitle) {
-            const modal = document.getElementById('submissionModal');
-            modal.dataset.entryId = entryId;
-            modal.dataset.entryTitle = entryTitle;
-            const formattedId = applySubindices(entryId + '.');
-            const formattedTitle = applySubindices(escapeHtml(entryTitle));
-            document.getElementById('modalTitle').innerHTML = `${formattedId} ${formattedTitle}`;
-
-            const stories = loadStories();
-            const entryStories = stories[entryId] || [];
-            const prev = document.getElementById('previousStories');
-            prev.innerHTML = entryStories.map(s => `<p>- ${escapeHtml(s)}</p>`).join('');
-
-            document.getElementById('storyInput').value = '';
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeSubmissionModal() {
-            const modal = document.getElementById('submissionModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             allLedgerEntries = ledgerEntries.slice();
             displayEntries(allLedgerEntries);
-
-            document.getElementById('closeModal').addEventListener('click', closeSubmissionModal);
-            document.getElementById('submitStory').addEventListener('click', () => {
-                const modal = document.getElementById('submissionModal');
-                const entryId = modal.dataset.entryId;
-                const entryTitle = modal.dataset.entryTitle;
-                const text = document.getElementById('storyInput').value.trim();
-                if (!text) return;
-
-                const stories = loadStories();
-                if (!stories[entryId]) stories[entryId] = [];
-                stories[entryId].push(text);
-                saveStories(stories);
-
-                const date = new Date();
-                const mm = String(date.getMonth() + 1).padStart(2, '0');
-                const dd = String(date.getDate()).padStart(2, '0');
-                const yyyy = date.getFullYear();
-                const timestamp = `${mm}/${dd}/${yyyy}`;
-                uploadSubmission(entryId, text, timestamp);
-
-                openSubmissionModal(entryId, entryTitle);
-            });
 
             const searchInput = document.getElementById('searchInput');
             searchInput.addEventListener('input', (e) => {
