@@ -2516,6 +2516,10 @@ now
         }
 
 
+        function applySubindices(str) {
+            return str.replace(/999(?:_|\.)?(\d+)/g, '999<sub>$1</sub>');
+        }
+
         function displayEntries(entriesToDisplay, searchTerm = "") {
             const container = document.getElementById('ledgerEntries');
             container.innerHTML = '';
@@ -2545,6 +2549,10 @@ now
                         descriptionHTML = entry.description.replace(searchRegex, match => `<span class="highlight">${match}</span>`);
                     }
                 }
+
+                idHTML = applySubindices(idHTML);
+                titleHTML = applySubindices(titleHTML);
+                descriptionHTML = applySubindices(descriptionHTML);
                 
                 const idEl = document.createElement('span');
                 idEl.className = 'entry-id';
