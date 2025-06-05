@@ -180,6 +180,31 @@ let allLedgerEntries = [];
             localStorage.setItem('ledgerStories', JSON.stringify(stories));
         }
 
+                    descriptionEl.innerHTML = descriptionHTML;
+                    entryDiv.appendChild(descriptionEl);
+                }
+                container.appendChild(entryDiv);
+            });
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML;
+        }
+
+        function loadStories() {
+            try {
+                return JSON.parse(localStorage.getItem('ledgerStories') || '{}');
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveStories(stories) {
+            localStorage.setItem('ledgerStories', JSON.stringify(stories));
+        }
+
         const GITHUB_CONFIG = {
             owner: 'LegendaryLad', // Replace with your GitHub username
             repo: 'LegendaryLad.github.io', // Repository name
