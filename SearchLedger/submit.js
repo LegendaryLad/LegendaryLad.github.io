@@ -15,16 +15,33 @@ function saveSubmissions(obj) {
     localStorage.setItem('ledgerStories', JSON.stringify(obj));
 }
 
+function base64Encode(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+}
+
+function base64Decode(str) {
+    return decodeURIComponent(escape(atob(str)));
+}
+
+function getToken() {
+    const param = getParam('token');
+    if (param) {
+        localStorage.setItem('gh_token', param);
+        return param;
+    }
+    return localStorage.getItem('gh_token') || '';
+}
+
 const GITHUB_CONFIG = {
     owner: 'LegendaryLad',
     repo: 'LegendaryLad.github.io',
     path: 'SearchLedger/ledger-submissions.json',
-    branch: 'main',
-    token: ''
+    branch: 'main'
 };
 
 async function uploadSubmission(entryId, text, timestamp) {
-    const { owner, repo, path, branch, token } = GITHUB_CONFIG;
+    const { owner, repo, path, branch } = GITHUB_CONFIG;
+    const token = getToken();
     const headers = { 'Accept': 'application/vnd.github+json' };
     if (token) headers['Authorization'] = `token ${token}`;
 
@@ -36,7 +53,7 @@ async function uploadSubmission(entryId, text, timestamp) {
         if (resp.ok) {
             const data = await resp.json();
             sha = data.sha;
-            dataArr = JSON.parse(atob(data.content));
+            dataArr = JSON.parse(base64Decode(data.content));
         }
     } catch (e) {
         // start with empty array
@@ -46,7 +63,7 @@ async function uploadSubmission(entryId, text, timestamp) {
 
     const body = {
         message: `Add submission for ${entryId}`,
-        content: btoa(JSON.stringify(dataArr, null, 2)),
+        content: base64Encode(JSON.stringify(dataArr, null, 2)),
         sha,
         branch
     };
