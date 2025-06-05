@@ -3,95 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Mouth Page</title>
-    <!-- Load Tailwind CSS from CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Inter font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Interactive Face Animation</title>
     <style>
+        /* Import Inter font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
         body {
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: #f0f0f0; /* Light background for contrast */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
         }
-        .bg-custom-image {
-            background-image: url('/images/TeddyMouth.jpg');
+
+        .face-animation-container {
+            position: relative;
+            /* Adjust max-width to suit your image's aspect ratio and desired size */
+            max-width: 400px; 
+            width: 90vw; /* Responsive width */
+            margin: 20px;
+            cursor: pointer;
+            border-radius: 15px; /* Rounded corners for the container */
+            overflow: hidden; /* Important if image itself isn't rounded or flaps go outside */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        #customMessage {
-            display: none;
-            position: fixed;
+
+        .face-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 15px; /* Ensures image respects container rounding */
+        }
+
+        /* This div is crucial. It's positioned absolutely OVER the mouth area of the image. */
+        /* You WILL NEED to adjust top, left, width, and height percentages */
+        /* based on where the mouth is in YOUR specific image. */
+        .mouth-interactive-area {
+            position: absolute;
+            /* === START: CRITICAL ADJUSTMENT AREA === */
+            top: 58%;    /* Percentage from the top of the image to the top of the mouth */
+            left: 25%;   /* Percentage from the left of the image to the left of the mouth */
+            width: 50%;  /* Percentage width of the mouth area relative to image width */
+            height: 28%; /* Percentage height of the mouth area relative to image height */
+            /* === END: CRITICAL ADJUSTMENT AREA === */
+            
+            /* perspective is needed for the 3D rotation of flaps */
+            perspective: 600px; 
+            display: flex; /* Helps with potential centering if needed, not strictly for flaps */
+            flex-direction: column; /* Stack flaps vertically */
+            /* background-color: rgba(0, 255, 0, 0.3); /* Uncomment for positioning aid */
+        }
+
+        .mouth-flap {
+            width: 100%;
+            height: 50%; /* Each flap takes half the height of mouth-interactive-area */
+            background-color: #1c1c1c; /* Dark color for flaps, matching typical mouth shadow */
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.4s ease-out;
+            /* Prevents seeing the back of the flap during rotation */
+            backface-visibility: hidden; 
+            position: relative; /* For z-indexing if needed, though not currently */
+        }
+
+        .top-flap {
+            transform-origin: bottom center; /* Hinge at its bottom edge (center line of mouth) */
+            border-radius: 5px 5px 0 0; /* Slight rounding for top flap */
+        }
+
+        .bottom-flap {
+            transform-origin: top center; /* Hinge at its top edge (center line of mouth) */
+            border-radius: 0 0 5px 5px; /* Slight rounding for bottom flap */
+        }
+
+        .enter-link {
+            position: absolute;
+            /* Center the link within the mouth-interactive-area */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 1000;
+            
+            color: #ffffff;
+            font-size: clamp(16px, 5vw, 28px); /* Responsive font size */
+            font-weight: bold;
+            text-decoration: none;
+            opacity: 0;
+            /* Delay appearance until flaps are somewhat open */
+            transition: opacity 0.5s ease-in-out 0.25s; 
+            pointer-events: none; /* Not clickable when hidden */
+            text-shadow: 0 0 8px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.6); /* Enhanced visibility */
+            z-index: 10; /* Ensure link is above flaps if any overlap during transition */
         }
+
+        /* --- Hover Animations --- */
+        .face-animation-container:hover .top-flap {
+            /* Rotates "away" from the viewer, upwards, and moves slightly */
+            transform: rotateX(80deg) translateY(-3px) translateZ(10px); 
+            opacity: 0.2; /* Make it semi-transparent instead of fully disappearing */
+        }
+
+        .face-animation-container:hover .bottom-flap {
+            /* Rotates "away" from the viewer, downwards, and moves slightly */
+            transform: rotateX(-80deg) translateY(3px) translateZ(10px);
+            opacity: 0.2;
+        }
+
+        .face-animation-container:hover .enter-link {
+            opacity: 1;
+            pointer-events: auto; /* Make link clickable when visible */
+        }
+
     </style>
 </head>
-<body class="h-screen m-0 flex justify-center items-center bg-gray-900 p-2 sm:p-4">
-    <div id="imageContainer"
-         class="relative w-full h-full max-w-2xl md:max-w-3xl max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)] 
-                bg-custom-image bg-contain bg-center bg-no-repeat bg-gray-800 rounded-lg shadow-2xl">
-        <div id="mouthArea"
-             class="absolute group cursor-pointer flex justify-center items-center"
-             style="top: 58%; left: 38%; width: 24%; height: 30%;">
-            <a href="#" id="enterLink"
-               class="text-white bg-black bg-opacity-75 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-lg sm:text-xl md:text-2xl font-bold
-                      opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out
-                      hover:bg-opacity-90 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-75">
-                ENTER
-            </a>
-        </div>
-        <div id="imageErrorPlaceholder" class="absolute inset-0 flex justify-center items-center p-4 hidden">
-             <p class="text-white bg-red-600 p-4 rounded-md shadow-lg text-center">
-                Background image failed to load. <br class="sm:hidden">Please check the image path or file.
-             </p>
-        </div>
+<body>
+
+<div class="face-animation-container">
+    <!-- 
+        IMPORTANT: Replace the src below with the correct path to your image.
+        If "TeddyMouth.jpg" is in the same folder as this HTML file, 
+        you can use src="TeddyMouth.jpg".
+    -->
+    <img src="/images/TeddyMouth.jpg" alt="Interactive Face" class="face-image" id="userFaceImage" onerror="this.src='https://placehold.co/600x600/444/eee?text=Image+Not+Found&font=inter'; console.error('Error loading user image. Ensure the path is correct.')">
+    
+    <div class="mouth-interactive-area">
+        <!-- These flaps will cover the mouth area initially -->
+        <div class="mouth-flap top-flap"></div>
+        <div class="mouth-flap bottom-flap"></div>
+        
+        <!-- This link will be revealed on hover -->
+        <a href="#enter-site" class="enter-link">Enter</a>
     </div>
-    <div id="customMessage" class="bg-indigo-700 text-white p-6 sm:p-8 rounded-xl shadow-2xl text-center max-w-xs sm:max-w-sm mx-auto">
-        <p class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">ENTER Clicked!</p>
-        <p class="text-sm sm:text-base mb-6">This is where navigation to another page or a specific action would typically occur.</p>
-        <button id="closeMessage"
-                class="bg-white text-indigo-700 px-5 py-2 sm:px-6 sm:py-2.5 rounded-lg font-medium 
-                       hover:bg-indigo-100 transition-colors duration-150 
-                       focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-75">
-            Close
-        </button>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const imageContainer = document.getElementById('imageContainer');
-            const mouthArea = document.getElementById('mouthArea');
-            const enterLink = document.getElementById('enterLink');
-            const customMessage = document.getElementById('customMessage');
-            const closeMessageButton = document.getElementById('closeMessage');
-            const imageErrorPlaceholder = document.getElementById('imageErrorPlaceholder');
-            const imageUrl = '/images/TeddyMouth.jpg';
-            const img = new Image();
-            img.src = imageUrl;
-            img.onerror = function() {
-                console.error('Background image failed to load:', imageUrl);
-                if (imageContainer) {
-                    imageContainer.style.backgroundImage = 'none';
-                }
-                if(imageErrorPlaceholder) {
-                    imageErrorPlaceholder.classList.remove('hidden');
-                }
-            };
-            img.onload = function() {
-            };
-            enterLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                if (customMessage) {
-                    customMessage.style.display = 'block';
-                }
-            });
-            if (closeMessageButton) {
-                closeMessageButton.addEventListener('click', () => {
-                    if (customMessage) {
-                        customMessage.style.display = 'none';
-                    }
-                });
-            }
-        });
-    </script>
+</div>
+
+<script>
+    // Optional: JavaScript for more complex interactions or preloading
+    // For this CSS-based animation, JS is not strictly necessary for the core effect.
+    // However, you might want to ensure image is loaded before calculating mouth position if doing it dynamically.
+    
+    // Example: If you want to allow users to upload/change the image dynamically in future
+    // const imageUpload = document.getElementById('imageUpload'); // Assuming you add an <input type="file">
+    // const userFaceImage = document.getElementById('userFaceImage');
+    // if (imageUpload) {
+    //   imageUpload.addEventListener('change', function(event) {
+    //     if (event.target.files && event.target.files[0]) {
+    //       const reader = new FileReader();
+    //       reader.onload = function(e) {
+    //         userFaceImage.src = e.target.result;
+    //         // You might need to re-calculate mouth flap positions if image dimensions change significantly
+    //       }
+    //       reader.readAsDataURL(event.target.files[0]);
+    //     }
+    //   });
+    // }
+
+    console.log("Interactive face animation loaded. Hover over the image!");
+</script>
+
 </body>
 </html>
