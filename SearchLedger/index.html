@@ -1,2612 +1,2595 @@
-diff --git a//dev/null b/SearchLedger/index.html
-index 0000000000000000000000000000000000000000..f8f316bec18e9e314e9cb031c23c7769c233462f 100644
---- a//dev/null
-+++ b/SearchLedger/index.html
-@@ -0,0 +1,2607 @@
-+<!DOCTYPE html>
-+<html lang="en">
-+<head>
-+    <meta charset="UTF-8">
-+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-+    <title>The Ledger</title>
-+    <script src="https://cdn.tailwindcss.com"></script>
-+    <link href="https://fonts.googleapis.com" rel="preconnect">
-+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
-+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
-+    <script type="text/javascript">
-+        WebFont.load({
-+            google: { families: ["Space Grotesk:regular","Urbanist:regular"] }
-+        });
-+    </script>
-+    <style>
-+        body {
-+            font-family: 'Space Grotesk', 'Urbanist', sans-serif;
-+            background-color: #ffffff;
-+            color: #000000;
-+        }
-+        .ledger-entry {
-+            border-bottom: 1px solid #cccccc;
-+            padding-top: 12px;
-+            padding-bottom: 12px;
-+        }
-+        .ledger-entry:last-child {
-+            border-bottom: none;
-+        }
-+        .entry-id {
-+            font-weight: bold;
-+            margin-right: 8px;
-+            flex-shrink: 0;
-+        }
-+        .entry-title {
-+            font-weight: bold;
-+        }
-+        .entry-description {
-+            margin-top: 4px;
-+            font-size: 0.9em;
-+            color: #333333; /* Slightly lighter black for description for contrast */
-+            word-wrap: break-word;
-+            overflow-wrap: break-word;
-+        }
-+        .highlight {
-+            background-color: #d1d5db; /* Light gray for highlighting search matches */
-+            font-weight: bold;
-+        }
-+        /* Ensure input text is black on white */
-+        input[type="text"] {
-+            color: #000000;
-+            background-color: #ffffff;
-+            border: 1px solid #000000;
-+        }
-+    </style>
-+</head>
-+<body class="bg-white text-black min-h-screen p-4 md:p-8">
-+    <div class="container mx-auto max-w-3xl">
-+        <header class="text-center mb-8">
-+            <h1 class="text-4xl font-bold">The Ledger</h1>
-+        </header>
-+
-+        <div class="mb-6">
-+            <input type="text" id="searchInput" placeholder="Search by name or number..." class="w-full p-3 border border-black rounded-md shadow-sm focus:ring-black focus:border-black text-black bg-white">
-+        </div>
-+
-+        <div id="ledgerEntries" class="bg-white p-0 md:p-6 rounded-md">
-+            <!-- Entries will be dynamically inserted here -->
-+        </div>
-+
-+        <footer class="text-center mt-12 text-xs text-gray-600">
-+            <p>Parsed from "The Ledger" by Ernst Unding.</p>
-+        </footer>
-+    </div>
-+
-+    <script>
-+        // Full text from the PDF needs to be pasted here
-+        // Due to the large size of the PDF content, it's included in a separate script block below.
-+        // This is a placeholder for where the full text would be defined.
-+        const pdfFullText = `
-+--- PAGE 1 ---
-+
-+The Ledger
-+
-+ERNST UNDING
-+
-+--- PAGE 2 ---
-+
-+First in Plight: 1-64 
-+
-+The original 64 plights were crafted and held in a deep space starting December
-+ of 2022. They were made available for sale. A portion of the early plights were
-+ reclaimed and are held in BOX and ALSO BOX, denoted below as "Boxed."
-+ The uncollected, remain (or not) in deep space and are entered as such.
-+
-+1. JAY OF THE MIDNIGHT SUNSET
-+The beautiful end will echo a beautiful beginning.
-+
-+2. BOXED
-+This one begs to be stolen. If you have the means, please do so. It is
-+ currently on my bookshelf next to Anne Garreta's In Concrete.
-+
-+3. BOXED
-+
-+4. PAUL OF REFLECTION
-+cf. plight 999_43 for an aspect of Paul's reflection.
-+
-+5. HAPPYFUN HIDEAWAY
-+
-+6. NARROWS
-+
-+7. LUKAS THE LOKUST
-+
-+8. MILOSZ KOZIEJ
-+
-+9. ALLISON & SAM PULLIN
-+See me after class.
-+
-+10. STRATA OF ABSURDISM
-+
-+11. ARUSHI OF ORIGINAL THOUGHT
-+
-+12. RYAN BOCK
-+
-+13. BOXED
-+Naturally, the number has fallen off.
-+
-+14. XAVIER OF PEACE
-+
-+15. DANNY OF ONESELF
-+
-+16. TERRI THE GROWER
-+2
-+--- PAGE 3 ---
-+17. RITA JIMENEZ
-+It is expected, that if Rita were given the chance, she would have given
-+ the title "of Iritadescent." Alas, it is only held here, in the layered
-+ textures of the archival.
-+
-+18. REMY HARRIS
-+See me after class.
-+
-+19. ADRIANA POLITIS
-+Widely considered to be the greatest patron.
-+
-+20. DEEP SPACE?
-+
-+21. THE CONEY ISLAND KID
-+
-+22. DEEP SPACE?
-+
-+23. CAI THE WARRIOR
-+
-+24. SAM OF SATAN
-+
-+25. ADRIANA POLITIS
-+Oh blessed be Adriana of the Keen Eye!
-+
-+26. PRINCESS PEGGY
-+
-+27. NANO OF SPORT
-+Plighted as recompensation for playing the squire during the act of Ce-
-+ mentus Set. The pour pour lad knew not what trials he committed
-+ to, but remains a true co-creator of the first of the Works. He was an
-+ incredible Sport.
-+
-+28. SAMIR OF EMPATHY
-+
-+29. BRYAN OF EASY, BREEZY, BEAUTIFUL
-+On the Taurus moon of 2023, plights no. 29, 52, 58, 60, and 63 were
-+ brought into the world for their plighting. Upon entry into the cage of
-+ Pet Shop, an agent of Janus, a keeper of thresholds, an old friend was
-+ found.
-+
-+30. ALEX OF CRAFT
-+
-+31. KIOWA HAMMONS
-+
-+32. PUFF OF NO SUFFERING
-+
-+33. MARIAN OF CATS
-+
-+34. ADRIANA POLITIS
-+Praise be to Adriana of the Golden Light!
-+3
-+--- PAGE 4 ---
-+35. DEEP SPACE?
-+
-+"36.","609 ROGERS AVE"
-+"37.","BLVCK TRUFFLE AT 38
-+ A syzygetic plighting of conquered age on the occasion of his 38th birth-
-+ day.
-+"
-+"38.","DEEP SPACE?"
-+"39.","DEEP SPACE?"
-+"40.","WHOSVLAD, THE ARTIST
-+ Plighted during Cementus Set for the generousity of physical and emo-
-+ tional stability in the form of a few two-by-fours and wisdom.
-+"
-+"41.","GAZOO TO THE MOON"
-+"42.","ALIDA OF LIBERATION"
-+"43.","DEEP SPACE?"
-+"44.","DANTE OF THE INFERNO
-+ Dante holds the distinction of the first recognized. The profane purchase
-+ of the plight was witnessed and having been so, was graced with the
-+ knowledge of the weight to bear. So entered all into the inferno.
-+"
-+"45.","Natalie of Racoon Whispher
-+ Adjacent artist during Cementus Set. She proffered outdoor tape which,
-+ in retrospect, would have been a great boon. Gift givers must learn to
-+ accept them as well.
-+"
-+"46.","JAMES OF UNIVERSAL BREAKFAST"
-+"47.","STEVEN OF ATTACHMENT + DETACHMENT"
-+"48.
-+49.","DEVIN OF FLUIDITY
-+ DEEP SPACE?"
-+"50.","GIGI CHEN"
-+"51.","HUGH DOCHERTY
-+ See me after class.
-+"
-+"52.","RAFFZILLA OF LOYALTY
-+ Plight no. 52 was the first to consume its own numeration, thus, pun-
-+ fortunately, it was dubbed the "Weekest." Raffzilla on the other hand is
-+ perhaps the strongest.
-+"
-+4
-+--- PAGE 5 ---
-+53. MARTINA OF PAINTING
-+Adjacent artist during Cementus Set. Held a mutual moment of the
-+ mystic over a Tarot reading. Call me. My number is 1.
-+
-+54. NAMES (IN THE CARE OF BRANDON)
-+
-+55. PLO MAN
-+
-+56. DAM PF CHAOS
-+
-+57. CPT. DAN'S GOOD TIME TAVERN
-+
-+58. MICHAEL & ROGER, THE DREAM TEAM
-+As two horns of the bull, these sages entered into the evening of the
-+ Found&Future Halloweekend precisely on cue.
-+
-+59. DEEPSPACE?
-+
-+60. RENE OF MEXICO
-+Presented on that bullish eclipse as a fare-thee-well on his pursuit of a
-+ place closer to the title, Texas.
-+
-+61. IN THE CARE OF PROMETHEUS JOY
-+
-+62. ADRI OF HAPPINESS
-+
-+63. LEX OF ART
-+Glory unto the fivefold-borough night of the endless beat.
-+
-+64. CHAR OF LIMINAL SPACE
-+01110111011010000111100100100000011000110110100001101111
-+01101111011100110110010100100000001100010011000000100000
-+01110111011010000110010101101110001000000111100101101111
-+01110101001000000110001101101111011101010110110001100100
-+00100000011010000110000101110110011001010010000000110001
-+001100000011000000110000001100000011000000100000
-+00101000011100110111010101110000001011000010000001101110
-+01100101011100100110010000101001
-+
-+In Mundo:65-954
-+
-+65. ADAM OF PARKOUR
-+Truly the first man.
-+
-+66. HAVEER OF ESTATE
-+
-+67. JARED (SPIKE) SORENSON
-+The plight was set using the Major form despite being Minor.
-+5
-+--- PAGE 6 ---
-+68. MARIA OF THE ABYSS
-+
-+69. KIP OF LAST PLACE
-+The grapevine suggests that this was further gifted again the same night
-+ in the time honored pursuit of tail. Reports do not indicate the success
-+ of the hunt.
-+
-+70. JAY OF OTHER
-+
-+71. G OF GAS
-+
-+72. DAVID OF COMICS
-+
-+73. BRIAN OF THE BOG OF ETERNAL STENCH
-+
-+74. MAUREEN OF NEIGHBOR
-+
-+75. NATHANIEL OF JEWEL BOX
-+
-+76. SAM MACDUFFIE OF BIRTH
-+
-+77. SPENCER OF AIR
-+
-+78. KIRA OF FART JOKES
-+
-+79. HANNAH OF IBS
-+
-+80. PORTLAND ZOO
-+
-+81. JENNIFER (MURPHY) OF CHILDREN
-+
-+82. SEAN OF SHAMANISM
-+
-+83. YOSSRA OF PANTS DECOMPOSITION
-+
-+84. STEEN OF PIZZA
-+
-+85. BECKETT
-+
-+86. JASON OF CHEESEBURGERS
-+
-+87. PROFESSOR FUZZ
-+
-+88. THE NIGHT
-+
-+89. ???
-+
-+90. GEORGE OF TOYOTA
-+
-+91. USMAN OF HOLLYMAN
-+
-+92. JESSENIA OF HOLD MY BEER
-+6
-+--- PAGE 7 ---
-+93. LAISA OF SALTING
-+
-+94. STEVEN OF COFFEE LAND
-+
-+95. SPRING BAR
-+
-+96. ALLISON OF JUPITER
-+
-+97. MATT OF PACE
-+
-+98. ARTISTIC SMOKE SHOP
-+
-+99. PALOMA OF PIPBOMB
-+
-+100. ARABELLA VON ARX
-+
-+101. JUSTIN OF NOTHINGNESS
-+
-+102. ???
-+
-+103. JAMES OF ZOBI
-+
-+104. JON ARONSON
-+
-+105. CONNOR OF CONNOR OF ?Redindney?
-+The first in a long line of illegible entries which the future may decipher
-+
-+106. JAY OF PEE
-+
-+107. STEVE OF STEVE
-+
-+108. THE MECKLERS
-+
-+109. LIAM OF WITS
-+
-+110. LIZZEE OF 110
-+
-+111. THE WALLOWS
-+
-+112. IONE BARROWS
-+
-+113. ANYA OF STOMACH ACHE
-+
-+114. ANYA OF QUEENS
-+Forgotten at the site of plighting and held as her own by Ingrid Norton.
-+
-+115. TAMA OF THE WORLD
-+
-+116. JEREMY OF LINES
-+
-+117. MYSTERY LOVERS
-+
-+118. TAYLOR OF UNITED AIRLINES
-+7
-+--- PAGE 8 ---
-+119. ROBYN OF HOOD
-+
-+120. SAMANTHA OF ITALY
-+
-+121. KEVIN OF FRIENDSHIP
-+
-+122. REESE OF THE LION
-+
-+123. DEVONTA OF KING OF KINGS
-+
-+124. ELLA OF THIS
-+
-+125. ERIC OF VIRILE
-+
-+126. IN THE CARE OF JEREMY
-+The first given to be given again.
-+
-+127. WILLIAM LOGAN
-+
-+128. ROLANDO OF THE NORTH EAST
-+The sacred 128=2^7 was misplaced and 127 went to Rolando. Sean
-+ultimately went unplighted, for now.
-+
-+129. SEAN OF THE MILKY WAY
-+See above.
-+
-+130. LYDIA OF PARTY
-+
-+131. KATIE OF WHAT
-+
-+132. MOMA PROTESTER
-+
-+133. LAUREN OF TEXAS
-+Originally in the care of Jeremy
-+
-+134. BEN HOWARD OF RIGHT ROUND
-+
-+135. LAZARUS BREWING Co.
-+
-+136. SEAN OF SCURRY (WORKHORSE)
-+
-+137. STOLEN
-+Pauli cried.
-+
-+138. ATUSONJE OF THE FUTURE
-+
-+139. SARAH OF RIGHTROUND
-+
-+140. AIMEE OF WHITE PEOPLE
-+
-+141. TERRY FROM THE NOC
-+8
-+--- PAGE 9 ---
-+142. SIR GNARLES OF BURLYBROOK
-+
-+143. MICHALA OF RIGHTROUND
-+
-+144. BAR FLYS
-+Contains a laminated booger. GROSS!
-+
-+145. KEVIN OF AIRPLANES
-+
-+146. BRUCE OF TEXAS
-+
-+147. ZORA OF AUSTIN
-+
-+148. HOLLY OF TIGRESS
-+
-+149. MARK OF ROGAN COMEDY CLUB
-+
-+150. BRADON FROM BLOOD BLACK NOTHINGNESS BEGINS TO SPILL
-+
-+151. DEAR UNCLE CLIFF
-+
-+152. SIDE BAR
-+
-+153. BUCKSHOT
-+Mistakenly numbered 154.
-+
-+154. WADE OF COOPER'S BBQ
-+
-+155. DANI OF THE NETHER
-+
-+156. JAMES OF MAIFA
-+
-+157. NICOLA OF HAPPINESS
-+
-+158. SPADE
-+
-+159. MALIK OF THE TRUTH
-+
-+160. KELLY OF DREAMLAND
-+
-+161. JOLENE OF BRUNEI
-+Written in pen..
-+
-+162. SXSW DROP IN EXPO HALL
-+
-+163. OGHASAIKHIN OF HOUSE OF NEHIKHNERE
-+
-+164. JOSHUA OF DUNGEON TAPE
-+
-+165. JOSEPH OF ATX
-+
-+166. SXSW DROP AT EMPIRE
-+This plight grew to some fame on the event's Reddit page.
-+9
-+--- PAGE 10 ---
-+167. LAMENT
-+
-+168. ROMAN OF NORTH LOOP
-+
-+169. JESSICA WINTER
-+
-+170. JOE OF OYSTERS
-+
-+171. "KAT" OF FORTY TWO
-+
-+172. AUGUSTINE
-+
-+173. THE LOW DOWN
-+
-+174. HENRY OF ENGLISH
-+
-+175. KAITLYN OF THE CORN
-+
-+176. REVENGE WIFE
-+
-+177. NTSKI
-+
-+178. CREEPING DEATH
-+
-+179. BE YOUR OWN PET
-+
-+180. UPLIFTED GROUND
-+
-+181. YAEL OF LATTÉ
-+
-+182. VCTMS (OF 182)
-+The plighted remarked that Blink 182 was her favorite band.
-+
-+183. ESCEULA GRIND
-+
-+184. CALLOUS DAOBOYS
-+Sold to the band for a previously gifted Cement Coin.
-+
-+185. SOUL GLO
-+
-+186. DANI, QUEEN OF THE SUNFLOWERS
-+
-+187. ASHLEY OF LAVENDER
-+
-+188. THE DEVIL (SARITA?)
-+
-+189. IN THE CARE OF THE SKY
-+
-+190. ETHAN OF THE DEVIL
-+
-+191. SKYLAR OF THE LESBIAN BAR
-+
-+192. ASTARIS LUX CAELI
-+10
-+--- PAGE 11 ---
-+193. TAU CETI
-+
-+194. THE ETHEREAL BABE
-+
-+195. GOAT SHIT AT CAPITAL OF TEXAS
-+
-+196. EYA OF CHICANERY
-+
-+197. RUBIN OF NOTHING
-+
-+198. LEXIS OF PUGS
-+
-+199. YARROW & SAGE
-+
-+200. ΜΟΝΚEY WRENCH
-+
-+201. CAT OF VANILLA
-+
-+202. TIGRESS PUB
-+
-+203. EPOCH COFFEE
-+
-+204. RESIDENCE MARRIOT
-+
-+205. ANNA OF CREATION
-+
-+206. IN THE CARE OF KELLY OF 160
-+
-+207. MAASER SUSHI
-+
-+208. JAMES OF DUSK MANTLE
-+
-+209. HIDDEN CASTLE IN THE REEDS (LUCK)
-+
-+210. HIDDEN CASTLE IN THE REEDS (STUCK)
-+
-+211. DICK OF ALBUM ART
-+
-+212. DOUG OF DARK WATER
-+
-+213. THE TRAVELLER
-+
-+214. HOLM OF $:-][^{6}~^{,}$ 
-+
-+215. THE BIG KING
-+
-+216. MADDIE OF DARTS
-+
-+217. BAR THE DESTROYER
-+
-+218. MAX OF ART
-+
-+219. A FOOL
-+11
-+--- PAGE 12 ---
-+220. THEO OF SHIT
-+
-+221. MARC OF EQUALITY
-+
-+222. IN THE CARE OF DANCING TONY
-+
-+223. MELISSA OF KEROSENE
-+
-+224. MARIAH OF WATER
-+
-+225. ΙΝΤΟ ΤHE VOID
-+
-+226. MISS PIGGY
-+
-+227. RJ OF THE SPIRIT OF CONEY ISLAND
-+
-+228. EARTH TEMPLE
-+
-+229. FREDIE OF SPACE
-+
-+230. ELLORY OF DIABETES
-+
-+231. JOHN OF DEGENERATION
-+
-+232. FUSSY FRIENDS
-+
-+233. ANDRIAN OF JERSEY
-+
-+234. MATT OF GOOD NATURE
-+
-+235. KEN OF OCD
-+
-+236. MICHAEL OF MUSIC
-+
-+237. RUINS DALLAS
-+
-+238. HAMPTON INN ADVENTURE TEAM
-+
-+239. DANIELLE OF ATHLETICA
-+
-+240. KEVIN OF SOCIAL JUSTICE
-+
-+241. CRYSTAL SHRINE GROTTO
-+
-+242. QUEERTINI TIME
-+
-+243. IAN OF THE LIE THAT TELLS THE TRUTH
-+
-+244. CEDAR THE WITCH
-+
-+245. TATIANNA, QUEEN OF THE FAIRIES
-+
-+246. STARGOYLE
-+12
-+--- PAGE 13 ---
-+247. CAYCE OF GLITTER
-+
-+248. MICHAEL OF RAINBOWS
-+
-+249. HALE OF LAUGHTER
-+
-+250. CHRISTO
-+
-+251. LUKE OF DESTRUCTION
-+
-+252. RJ, MAN OF ZA
-+
-+253. MAX OF LOVE
-+
-+254. JAMES OF DUAL MULE
-+
-+255. JUNEBUG OF RENO'S
-+
-+256. TROY OF THRILLS
-+
-+257. WOUNDED OSTRICH
-+
-+258. SIREN OF TEETH
-+
-+259. SUE OF HOOTERS
-+
-+260. STEVE OF RENO'S
-+
-+261. MEGAN OF CHAOS
-+
-+262. PLINY FISK III
-+
-+263. KYLE OF LEFT SQUARED
-+
-+264. TIM OF LOST BALLPOINT PEN CAPS AND PUTRESCENT GREEN RAB-
-+BITS
-+
-+265. SPRINGHILL SUITES
-+
-+266. GLENN OF THE SUNRISE
-+
-+267. TAYLOR TX
-+
-+268. DARCY OF RUINS
-+
-+269. CARLY & JOHN
-+
-+270. IN THE CARE OF CONNOR
-+
-+271. IN THE CARE OF NIKO WAX
-+
-+272. KNOCKDOWN BATHROOM
-+13
-+--- PAGE 14 ---
-+273. CAROILYN OF ?Disitherm?
-+
-+274. LAVENDER OF B-DAY
-+
-+275. MATMOS
-+
-+276. JOSH OF CISUM
-+
-+277. CHARLIE BURNHAM
-+
-+278. DAVID TORN
-+
-+279. MEREDITH OF OPENNES & NON-JUDGMENT
-+
-+280. FLUKE MOGUL
-+
-+281. MATTEO OF MOLTO OHM
-+
-+282. ΚΑ ΒAIRD
-+
-+283. JENNIFER OF UNICORNS
-+
-+284. CLAIRE OF THE MOON
-+
-+285 286. ΚAY & KATHLEEN
-+The plights were accidently fused together. They have since broken up.
-+
-+287. JACK OF "JACK"
-+
-+288. JEFF W.
-+
-+289. SANGITA OF TEETH
-+
-+290. ALAN OF THE EARTH
-+
-+291. MILAN OF KUNDERA
-+
-+292. IN THE CARE OF OLIVIA (JT GREEN)
-+
-+293. GIGI CHEN
-+
-+294. ALEXIS KANDRA
-+
-+295. GRADA KILOMBA
-+
-+296. TREVOR PAGLEN
-+
-+297. CLERK #3 OF MCNALLY JACKSON
-+
-+298. TRAILER PARK LOUNGE
-+
-+299. GREG OF ZONE 5
-+14
-+--- PAGE 15 ---
-+300. ELVIS OF HOTDOG CITY
-+
-+301. TARA OF DAEMONS
-+
-+302. MICHELE OF AVEC UN L
-+
-+303. RICHARD OF SHADOWS
-+
-+304. HALCYON
-+
-+305. AJA OF FROGLAND
-+
-+306. JEN, MASTER OF GECKOS
-+
-+307. JOHN OF ELYSIUM
-+
-+308. LUCAS OF GRYZELDE
-+
-+309. ΕΝΟ & MIMI
-+
-+310. XY OF COMPASSION
-+
-+311. STEFAN OF THE PLAINS
-+
-+312. MOLOCH
-+
-+313. SADIE OF ELYSIUM
-+
-+314. CMPBS
-+
-+315. AVON, KEEPER OF WALNUTS
-+
-+316. SIGMOND, WARRIOR OF KINDNESS THROUGH ART
-+
-+317. MEEK OF MONAD
-+
-+318. TIGRESS REDUX
-+
-+319. OAKDA MALKUTH
-+
-+320. LOST MAGIC FOUND
-+
-+321. ELLIOT OF AUTISTIC EXPRESSION
-+
-+322. ED OF XTRIMINERICH
-+
-+323. JOSEPH OF KINDESS
-+
-+324. SHANIA OF LIGHT
-+
-+325. ELENA OF WHO?!
-+
-+326. TYLER OF QUEEN CRUST
-+15
-+--- PAGE 16 ---
-+327. DIEMOS
-+
-+328. ISAIAH OF FIDELITY
-+
-+329. CHILO'S
-+
-+330. TAY
-+
-+331. ONE STAR
-+
-+332. SUPER POWER
-+
-+333. LIZ OF LIVING
-+
-+334. ELI OF DOLPHIN
-+
-+335. CROWN INN
-+
-+336. MANNET OF $28
-+
-+337-
-+KAYLEE OF CLOTHES
-+
-+338. STORM OF COOLNESS
-+
-+339. THE OTHER WORLD
-+
-+340. NOVARE RES
-+
-+341. LILY OF EQUITY
-+
-+342. RICHARD OF HOUSING
-+
-+343. MARK OF FOISTING
-+
-+344. HOLDEN OF LOVE
-+
-+345. MAINE CANNABIS EXCHANGE
-+Set with vinyled cement.
-+
-+346. PETSHOP
-+Set with vinyled cement.
-+
-+347. PETER OF LIFE MUSIC
-+348 SAM OF WAGES
-+
-+349. WEEDMAN OF WASHINGTON PARK
-+
-+350. DON OF NEW ART CITY
-+
-+351. VIOLA OF CREATIVE TECHNOLOGY
-+16
-+--- PAGE 17 ---
-+352. YO-YO OF CHAOS
-+Veeler points to a lone form amongst the minnows, cloud headed and
-+ with a kind face. I plight them and recieve their title before a hasty
-+ return to the magical miasma I had been at brew before. So burdened,
-+ the storm kept the cube in their right hand for the entire show. I left
-+ the building as the pigs filed in.
-+As the clock struck 1h26 on 25 Merde 150, mere hours after the plight-
-+ ing, I recieved an email from Hex House, subject line "Advice accepted."
-+ The body of the email held a 2.2 MB IMG 9564.jpeg file revealing an
-+ unknown character at hammer to chisel upon what must be assumed to
-+ be no. 352.
-+Cybersewing bring to me another sight of the plight, as @charstiles
-+ emits a video of @yoyo.munk taking the chisel to cement, followed by
-+ @blackchainbody holding the un-fortunate plight alight. Burn on.
-+
-+353. THE MAGICIAN
-+
-+354. NATASHA OF AUTHENCITY & COMMUNITY
-+
-+355. RENO OF A BUBBLE
-+
-+356. TAYLOR OF ALIGNING YOUR OWN PATH
-+
-+357. AMELIA OF SILLINESS
-+
-+358. PERSEPHONE OF MERCY
-+
-+359. MIRANDA OF THE WORLD
-+
-+360. 262 BARROW ST. APT 2
-+
-+361. KRUSHANG OF BIO
-+
-+362. DEVIN, THE HERO
-+
-+363. ALEXEY OF FAILURE
-+
-+364. TOOTLYPUM
-+
-+365. BEN OF INDECISION
-+
-+366. ABSTRACT CLIT
-+
-+367. RUBY OF MINIMUM WAYNE
-+
-+368. SERENE OF LOIN
-+
-+369. TEE OF ANTI-CAPITALISM
-+
-+370. LAURA OF THE FLOWERS
-+17
-+--- PAGE 18 ---
-+371. JACKIE OF JUST HANGING OUT
-+
-+372. CODY OF CHISELING
-+Originally plighted to Char of no. 64, but replighted along.
-+
-+373. IN THE CARE OF AMIR
-+
-+374. BUSHWICK COUNTRY CLUB
-+
-+375. JARI JONES
-+
-+376. THE LIBRARY
-+
-+377. PACE OF EARTH
-+
-+378. SYD OF ASYMMETRY
-+
-+379. BARRY OF PEACE AND LOVE
-+
-+380. NAYRIM OF THE WORLD
-+
-+381. BRUNO OF LIVING
-+
-+382. CARO OF KNOWLEDGE
-+
-+383. MATT OF FERRUM FERRO EXACITUR
-+The first of the white numbering.
-+
-+384. JOE OF THE WAY WAY
-+
-+385. CHRISTINA OF CONFIDENCE
-+
-+386. PRUZI OF LOVE
-+
-+387. ATTILO OF CUSHING
-+
-+388. WYL OF ACTION
-+
-+389. MAX SYNDER
-+
-+390. GRANT OF HEAT
-+
-+391. JAIME OF FAMILY
-+
-+392. NETOPSKIS OF LOVE
-+
-+393. LEIGH OF SINCERITY
-+
-+394. LYDIA OF CROCS
-+
-+395. ANGELIC OF PERU
-+
-+396. GRACE OF MARXISM
-+18
-+--- PAGE 19 ---
-+397. ALMA OF ALL SPACES ARE PUBLIC SPACES
-+
-+398. GROVE NEWS CORNER
-+
-+399. SAM OF HUMAN CONNECTION
-+
-+400. BILL & SEPHRAH
-+
-+401. KRYSTYN OF NOMAD
-+
-+402. HOLLY OF SNSUAL GRIEF
-+
-+403. AUSTIN OF THE NORTH WOODS
-+
-+404. BRIAN OF INSIGHTS
-+
-+405. LESLEY OF SPARKY THE DOG AND THEN YOU KNOW WFMU'S ROCK
-+N' ROLL SOUL RADIO SEATNERD
-+
-+406. COUCH SLUT
-+
-+407. ST. VITUS
-+
-+408. MEG OF NOBODY SUFFERING & SMOKING WEED
-+
-+409. JAN OF CURIOSITY
-+
-+410. ROBERT OF SITTING
-+
-+411. BRIAN OF TRUTH
-+
-+412. LAURIE OF A CRIPPLING FEAR OF DEATH
-+
-+413. JOHN OF RAGTIME
-+
-+414. DONOVAN OF AUTHENTICITY
-+
-+415. DAVE OF DAVE'S
-+
-+416. EMILY OF TALKING TOO FAST
-+
-+417. IN THE CARE OF STEVE
-+He gave it to one of his boys.
-+
-+418. GYPSY OF ARCHIEL VILLAGE
-+
-+419. NOT HERE
-+
-+420. NOT HERE
-+
-+421. NOT HERE
-+
-+422. GLORIEL OF ART HISTORY
-+19
-+--- PAGE 20 ---
-+423. JAMIE OF EVERYONE DESERVES A SHOT
-+
-+424. CHRISTINA OF ROCK
-+
-+425. EVAN OF ANIMALS
-+
-+426. RUSTARD OF MUSTARD
-+
-+427. LON OF GOOD
-+
-+428. ED OF DUNCAN
-+
-+429. JACOB OF MAXIMAL RADIANCE
-+
-+430. NICOLL OF OVERTHINKING
-+
-+431. JIMOTHIAN OF THE VOID
-+
-+432. JAKE OF NAN
-+
-+433. ΒΟΝΟΒO OF HOUSE OF NOT OF THIS TIME
-+
-+434. HERMINA OF ILLEGAL RABBIT BREEDING
-+
-+435. AVDOL OF LOGIC & REASON
-+
-+436. KADE OF PUPPETRY
-+
-+437. JESSE OF TOOLS
-+
-+438. ROB OF LIKES TO SMASH HOT METAL
-+
-+439. DRUID OF NATURE
-+
-+440. TOKI WARTOOTH OF SHARING
-+
-+441. DJ EPZ
-+
-+442. ILYA OF TINKER
-+
-+443. NICK OF HEAVY FUCKING METAL
-+
-+444. BIG BLOOD
-+
-+445. JAMES OF BAGPIPERS
-+
-+446. LEV OF HONER
-+
-+447. MJOP
-+
-+448. DANNY OF WORK
-+
-+449. JOJOKITTYLUVAH92
-+20
-+--- PAGE 21 ---
-+450. AIDEN OF POOPING
-+
-+451. SNAKE UNION
-+
-+452. BEN OF BADA BING
-+
-+453. MOTTE
-+
-+454. CHRIS OF HUMAN RESOURCE MANAGEMENT
-+
-+455. HANNAH OF SCHLEPPING
-+
-+456. SRAH OF MELISSA
-+
-+457. LILY OF LOVE
-+
-+458. FREE ON STOOP
-+
-+459. MARK OF ANIMALS
-+
-+460. TIFFANY OF LEGEND
-+
-+461. MICHAEL OF I DEFEAT THE DEVIL
-+
-+462. WALGREENS WOMAN
-+
-+463. JOHN OF DANCETERIA
-+
-+464. DARSHAN OF INDIA
-+
-+465. NEW HOME
-+
-+466. TRAVIS OF AIRPLANES
-+
-+467. SEAN OF ANGEL
-+
-+468. RAFAEL THE FRIGHTENED CHICKEN
-+
-+469. CHRIS OF MICHAELS
-+
-+470. CLARA OF HOUSE OF EGG
-+
-+471. LARRY OF NIGHT SHIFT
-+
-+472. SOHA OF SIMULATION VORTEX
-+
-+473. DARBY OF
-+Entry partially censored for posterity.
-+
-+474. TREVOR OF THE FREE SPIRIT
-+
-+475. VERONICA OF CONTINUES
-+21
-+--- PAGE 22 ---
-+476. DAVE OF BASS PLAYING
-+
-+477. COLIN OF MUSIC
-+
-+478. VON OF THE RIFT
-+
-+479. ENDSWELL
-+
-+480. WILL OF SEED OF MOOSE
-+
-+481. ANNA OF SPIRITED AUTONOMY
-+
-+482. OMAR OF RASTAFARI
-+
-+483. ANDREW OF CREATIVE JUICE
-+
-+484. GEORGE OF 54
-+
-+485. MARINA OF NOSTALGIA
-+
-+486. KATYA OF GOOD MOVES
-+
-+487. TRISHA OF COMMUNITY
-+
-+488. ERIC ANDRE
-+The plighted took the burden but, in the pursuit of tail, forgot the cube
-+ at the bar. It may still live at Horses & Divorces.
-+
-+489. THADDEUS OF HE
-+
-+490. FREDDY'S (IN THE CARE OF DAVE)
-+
-+491. TABAH OF WITHHELD PERMISSIONS
-+
-+492. CASSIE OF A GOOD TIME
-+
-+493. ROMER OF EL GATO TRABAJAN
-+
-+494. EDUARDO OF GRANDPA
-+
-+495. DABS OF TURTLES ALL THE WAY DOWN
-+Numbered 496 to hide the power of the perfect.
-+
-+496. AL-A, FIRST OF THE GOLEM
-+Numbered 495 to hide the power of the perfect.
-+
-+497. MCDERMOTT OF LADDER 25
-+
-+498. JASON OF CHRIST
-+
-+499. SAMANTHA OF MATERIAL CREATIVITY
-+22
-+--- PAGE 23 ---
-+500. KATE OF CURIOSITY
-+First entry written with pencil glasses.
-+
-+501. EDWIN OF INSTIGATION
-+
-+502. BRIANNA OF FASHONISTA
-+
-+503. CILLA OF HUMANITY
-+
-+504. LAST PLACE TRIVIA
-+
-+505. USHA OF WAP
-+
-+506. KENNEDY OF COMMUNITY, DISCOVERY, & PLAY
-+
-+507. MARIO FROM THE BARIO
-+
-+508. FINN OF LIBERATION
-+
-+509. NOUR OF NOIR
-+
-+510. ROX OF ?Rabbit Romance?
-+
-+511. ALESSANDRA OF ACCEPTANCE
-+Numbered 512 to hide the power of twos.
-+
-+512. SARAH OF DJ DAVE
-+Numbered 511 to hide the power of twos.
-+
-+513. NORA OF DANCE MUSIC EUPHORIA
-+Written in pen.
-+
-+514. NORA OF YEARNING
-+
-+515. CHRIS OF THE MOMENT
-+
-+516. ANDY THE STEADFAST
-+
-+517. MITRA OF FIRST COME, FIRST SERVE
-+
-+518. ARIEL OF GREZNY
-+
-+519. ALEXANDER OF ABSOLUTE SPIRITUAL POWER
-+Plighted on the occasion of the 10th birthday of L.O.T.Ι.Ο.Ν.
-+
-+520. KEM OF DESTROY EVERYTHING
-+
-+521. DENNIS OF THE MIND
-+
-+522. FRANK OF FATHER
-+
-+523. BEN OF GOLF
-+23
-+--- PAGE 24 ---
-+524. SYD OF ABORTION
-+
-+525. WAYNE OF JUDAH
-+
-+526. SHEA OF FAIRY CIRCLES
-+
-+527. ?Heloira? OF COMPASSION
-+
-+528. KITTY OF KATS
-+
-+529. REASON
-+
-+530. JAIME OF SUGAR
-+
-+531. ANGEL OF ANARCHISM
-+
-+532. AL-B, SECOND OF THE GOLEM
-+Plight is fireless.
-+
-+533. MICHELLE OF RAGE
-+
-+534. DELI OF DIATOMS
-+
-+535. ELYA OF HAPPY NEW YEAR
-+
-+536. ALAS OF BICS
-+
-+537. ELRIC OF JUXTAPOSITION
-+
-+538. EMILY OF A REGULAR GUY
-+
-+539. RYAN OF FRIENDSHIP
-+
-+540. BAR 718
-+
-+541. COLIN OF ACTIVE KINDNESS
-+
-+542. MAMA TRIED (IN THE CARE OF WILL)
-+
-+543. JOE OF ALL THE TIME METAL
-+
-+544. SACHAE OF LOVE
-+
-+545. ABE OF DOUCHING
-+
-+546. THOMAS OF JACK SHIT
-+
-+547. PIERCE OF MY PARENTS
-+
-+548. ANN OF HOVING
-+
-+549. XENA OF COLLECTIVISM
-+24
-+--- PAGE 25 ---
-+550. MAGGIE OF HUMOR
-+
-+551. DENIS OF THE FUCK ?Pioreccs?
-+
-+552. MAYA OF SCRAPPY
-+
-+553. JACKIE OF UNCONDITIONAL LOVE
-+
-+554. ELIJAH OF HAPPINESS
-+
-+555. AWAITING
-+
-+556. CONOR OF THE LAW
-+
-+557. ANDREW OF MISCHIEVOUS SWEETHEART
-+
-+558. COTTER OF NOTHING
-+
-+559. AVI OF ABSOLUTE FREEDOM
-+
-+560. EYN OF SENTIENCE
-+
-+561. ANDREA OF BEING A PILLAR FOR YOURSELF
-+
-+562. MAARI OF BELIEF & LOVE
-+
-+563. MOON OF SILLINESS
-+
-+564. REUBEN OF DESIGN
-+
-+565. DOUG OF PRECISION
-+
-+566. LUCKY 13 SALOON
-+
-+567. MEI JIN OF LOYALTY
-+
-+568. MIKE OF HARMONIES
-+
-+569. TITO OF BLACK METAL
-+
-+570. KAT OF KOMPASSION
-+
-+571. CHRIS OF FAIRNESS
-+
-+572. AZEZAL OF LIMITLESS CONCERNS
-+
-+573. MICHAELE OF COINS
-+The Ledger inexplicably skips from 572 to 574. A week later, I recieved
-+ 573 from across the bar at Lucky 13s, noting the omission for the first
-+ time. In order to dispel the obvious cursed nature of this "rogue" plight,
-+ it was plighted to the agent of Janus at Butterfly.
-+
-+574. GABE OF PRIOR FIRE
-+25
-+--- PAGE 26 ---
-+575. DUANE OF DEEP DIVES
-+
-+576. DEVON OF COLD LEFTOVERS FOR BREAKFAST
-+
-+577. GREG OF NIGHTFALL OF DIAMONDS
-+
-+578. GRACE OF GOOD TIMES
-+
-+579. SHARISE OF PEACE
-+
-+580. KAROLINA, MASTER OF DISASTER
-+
-+581. MATT OF CHEESEBURGER
-+
-+582. WILLY OF CHILLING
-+
-+583. CHARLES OF DEVELOPMENTS
-+
-+584. GRACE OF SHIT STIRRING
-+
-+585. JENNY
-+
-+586. JEREMY OF LAUGHTER
-+
-+587. LEAH OF CANDY
-+
-+588. YURI THE CREATOR
-+
-+589. ANGELA OF CATS
-+
-+590. WILLIAM OF GREAT TIMES
-+
-+591. IAN OF CHAOTIC CATHARSIS
-+
-+592. NICK OF THE WORLD
-+
-+593. MATHILDE OF REBIRTH
-+
-+594. ANDREJS OF DIRECTED DIMENSION
-+
-+595. DAVID OF A CAT
-+
-+596. GREY OF LOVE
-+
-+597. DELIAH OF HARLEM
-+
-+598. KIMBRA OF LOVE
-+
-+599. KAORU OF MYSELF
-+
-+600. VARUN OF CRUELTY
-+
-+601. JEREMY OF THE BEAT
-+26
-+--- PAGE 27 ---
-+602. DARIAM OF SPIRALS
-+
-+603. MAURO OF DORABA
-+
-+604. ZOH OF SUNSHINE
-+Replighted to Sophia Brous of EXO-TECH.
-+
-+605. JAMES OF KAIZEN
-+
-+606. JESUS OF CHRIST
-+
-+607. SHALIN OF RECENTLY POSSIBLE
-+
-+608. ΜΙΚE OF EXPRESSION
-+
-+609. SEAM OF NOISE
-+
-+610. JUSTIN OF STAY LIGHT
-+
-+611. HILTON OF THE SUNSET OF THE SOUL
-+
-+612. CHRIS OF JAZZ
-+
-+613. REBECCA OF REPRODUCTIVE JUSTICE
-+
-+614. ALIZEÉ THE GODDESS
-+
-+615. JOSHUA OF AUTONOMY
-+
-+616. PHILLIP, BRINGER OF PEACE
-+
-+617. JAMES OF OLD LADRES
-+
-+618. JITWAM OF CHANGE
-+
-+619. BLAKE OF COMMUNISM
-+
-+620. JENNIFER OF JUSTICE & PEACE
-+
-+621. KAYE OF OPTIMIST NIHILISM
-+
-+622. FRAN OF HUMANITY
-+
-+623. ARIELLA OF BOLD AS LOVE
-+
-+624. AMANDA OF MYSELF
-+
-+625. ASHTON OF SOUND LOGIC
-+
-+626. ALEX OF SUSTAINIBILITY
-+
-+627. CONNOR OF THE SOUL
-+27
-+--- PAGE 28 ---
-+628. AMELIA OF HONESTY
-+
-+629. TERRELL OF TITTIES
-+
-+630. DRE OF THE BLACK FLAME
-+
-+631. SYDER OF THE FUTURE
-+
-+632. MEG OF IDK
-+Written in ink.
-+
-+633. MILLER OF OPEN MINDEDNESS
-+
-+634. VERONICA OF BEING KIND TO EVERYONE
-+
-+635. RAQUEL OF DYING
-+On account of the chaos, no. 635-638 played a dance and may be in
-+ alternatively listed hands.
-+
-+636. KATYA OF ?Shredding?
-+See above.
-+
-+637. ROSS OF CONSTANT LEARNING
-+See above above.
-+
-+638. TIFF OF REVELRIE
-+See above above above.
-+
-+639. MIKE OF THE BROILING NOTION
-+
-+640. JACKSON OF EQUAL FREENESS
-+
-+641. OLIVIA OF ADTECH
-+
-+642. ALEX OF THE MARSH
-+
-+643. DAN OF BEING AWESOME AND MILDLY SMART
-+
-+644. BELL WITCH
-+
-+645. CAMERON OF SONDERS
-+
-+646. NATALIE OF PURPLE HAZE
-+
-+647. JOSEPH OF HAPPINESS
-+
-+648. MILES OF FRIED CHICKEN
-+
-+649. ELISE OF la force tranquille
-+Written in her own hand.
-+
-+650. JOE OF QUALITY
-+28
-+--- PAGE 29 ---
-+651 FELICIA OF FAMILY AND FAMILY
-+
-+652 ALEX OF MAKING THINGS BETTER
-+
-+653. MITCHA OF PLAY
-+
-+654. BEN OF JEST
-+
-+655. MONA OF A NEW AGE
-+
-+656. KIERAN OF THE GATEWAY TO HELL
-+
-+657. ANDY OF THE GREATEST PARTIES ON EARTH
-+658 CHRISTIANO OF NOTHING
-+
-+659. SERO OF SPIRAL
-+Plights 660-669, set on All Hallow's Eve, each bind a Demon of Modernity.
-+
-+660. Ingrid of Forlorned Love
-+
-+661. AWAITING of Fascist Time
-+
-+662. AWAITING of Marring of the Heavens
-+
-+663. AWAITING of Environmental Rage
-+
-+664. Rich of Dissassociation
-+
-+665. Avi of Addiction
-+
-+666. AWAITING of Consumptive Waste
-+
-+667. Elizabeth of Celebrity
-+
-+668. AWAITING of Speculative Value
-+
-+669. BOND of Nihilism
-+It may still be there....
-+
-+670. COSTUME CONTEST
-+
-+671. DAVID OF ATTEMPTED WELL BEING
-+
-+672. NICK OF GOOD COFFEE
-+
-+673. DIIV
-+
-+674. JACK OF HIGH
-+
-+675. DAN OF STRAIGHT EDGE
-+29
-+--- PAGE 30 ---
-+676 DANIAL OF HARMONY & PEACE
-+
-+677. KEKO OF MERGE
-+678 MATT OF PSYCHOSIS
-+
-+679. IVY OF DESTRUCTION OF SYSTEMATIC LIFE
-+
-+680. JAMAICA OF TECHNO
-+
-+681. FERGUS OF CEREMONY
-+
-+682. RACHEL OF KINDESS
-+
-+683. ELMAR OF MIXING
-+
-+684. ZOE OF SHRED
-+
-+685. MIGUEL OF CHABES
-+
-+686. REIKO OF GRATITUDE
-+
-+687. LUCY OF THE NIGHT SKY
-+
-+688. CLINTON OF THE HOUSE OF AMBIENCE
-+
-+689. M OF LOVE
-+
-+690. EDWARD ON MY TWO FEET
-+
-+691. ALESSANDRA OF HER DAUGHTER
-+
-+692. DAMON OF RABBIT HOLE
-+
-+693. GENE OF FIXING PROBLEMS
-+
-+694. SHANI OF HOPE FOR HUMAN BEINGS
-+
-+695. KELLY OF JUST ME
-+
-+696. TAY OF SOUNDS & SONICS
-+
-+697. ANNA OF EDEN
-+
-+698. DAHLIA OF SPECIFICITY
-+
-+699. MIL OF NOT THINKING ABOUT IT
-+
-+700. AWAITING
-+
-+701. RANDIE OF THE MAN WITH THE CURLY HAIR
-+
-+702. DRAMA DRIVE'S BROTHER
-+30
-+--- PAGE 31 ---
-+703. JOSHUA OF MY LEGS
-+
-+704. CHRISTINA, THE DESTROYER OF WORLDS
-+
-+705. OMAR OF FREE PALESTINE
-+
-+706. DRAMA DRIVE
-+
-+707. STEPHEN OF HEART
-+
-+708. KAT OF LEOPARD
-+
-+709. HERNAN OF LACKSIDASICAL ART
-+
-+710. ZHENYA OF THE POSSIBILITY OF THE IMPOSSIBLE
-+
-+711. EUGENE, THE ARTIST FORMERLY KNOWN FOR PRINTS
-+
-+712. THE GATE (IN THE CARE OF KELLY)
-+
-+713. MARK OF WAR
-+
-+714. SEB OF SOCCER
-+
-+715. CHRIS, DANCE CHASER
-+
-+716. CAMILA OF FREEDOM
-+
-+717. BERNI OF THE PEOPLE'S JERKY
-+
-+718. ELLA OF ENTROPY
-+
-+719. MAGGIE OF TRUTH
-+
-+720. AMAR OF JACOB
-+Plighted at 2H32AM on a whim on a walk between Thanksgiving dinner
-+ and High Dive to a group of strangers. Amar was the first drawn to the
-+ light and spoke his true name.
-+
-+721. TOM OF CREATIVE SATISFACTION
-+
-+722. KILLIAN OF BAKING
-+
-+723. TROY OF THAT GOOD GREEN GANJA
-+
-+724. ALLY OF GARDENIA
-+Originally in the care of Char of 64 
-+
-+725. MEGAN OF DELAYED SPONTANEITY
-+
-+726. JJ, AGENT OF CHANGE
-+
-+727. SAMANTHA OF THORNS
-+31
-+--- PAGE 32 ---
-+728. CHRISTOPHER OF GLOBAL FREQUENCY
-+
-+729. MATSU OF FOOD
-+
-+730. CHRISTINA OF SUPERFINE
-+
-+731. ELLISON OF BEAUTY & CYBORGS
-+
-+732. DAH, REFORMED ARTIST
-+
-+733. SYDNEY OF BLUNTNESS
-+
-+734. CLEO OF CLIMATE JUSTICE
-+
-+735. JANUS OF MANSIONS
-+
-+736. LOVEBIRDS (IN THE CARE OF LOLO)
-+
-+737. ANNA OF LISTENING
-+
-+738. ALEC OF VIRTUES
-+
-+739. TANNER OF BEING YOURSELF
-+
-+740. PALACE (IN THE CARE OF NICHOLAS)
-+
-+741. JK THE PRACTIVISTA
-+
-+742. ROMNALDAS OF FUCKED OFF SHADOWS
-+
-+743. SCOTT OF ALL KINDS OF ART
-+
-+744. NOAH OF HONESTY
-+
-+745. EMMA OF THOUGHTFULLNESS
-+
-+746. LEAH, SAINT OF PATRONS
-+
-+747. JASON OF SOUND
-+
-+748. WILL OF CALM
-+
-+749. DANIEL OF THE LIONS DEN
-+
-+750. LUNA OF THE RIGHT TO PARTY
-+
-+751. JASPER OF GOOD FUCKING DANCE FLOORS
-+
-+752. MITCHYLL OF EXPRESSION
-+
-+753. LISA OF INTERSECTIONAL FEMINISM
-+
-+754. KENZIE, MARATHONER
-+32
-+--- PAGE 33 ---
-+755. PIXIE OF EVERYTHING I BELIEVE IN
-+
-+756. STELLA OF DARTS
-+
-+757. ASHLEY OF LATE NIGHT
-+
-+758. MICHAEL OF SCALE
-+
-+759. WILL OF UNFOUND DEPTHS
-+
-+760. BRITTANY OF HEMLOCK
-+
-+761. JESS OF HAVING FUN
-+
-+762. SAM OF SOLIDARITY
-+
-+763. DAN OF FILM MAKING
-+
-+764. ALY OF THE LIGHT
-+
-+765. IAN OF INDIVIDUALITY
-+765. JORDAN OF DEATH
-+
-+766. JADE THE JUST
-+
-+767. MATT OF CURIOSITY
-+
-+768. KYLE OF KNOWLEDGE
-+
-+769. TIMOTHY OF SAKE POWER
-+
-+770. HEIDI OF COMRADERIE
-+
-+771. SARAH OF ANNOYING QUESTIONS
-+
-+772. JAIME OF FAMILY
-+
-+773. JOHN + LINDA OF THE FUTURE
-+
-+774. HEADWATERS
-+
-+775. SHANNON OF KINDNESS
-+
-+776. HALLIE OF THE DIGNITY OF HARD WORK
-+
-+777. BRIAN OF IRON & BLOOD
-+
-+778. NATE OF THE DIGITAL ALPHINE
-+
-+779. ISABELLA OF MATHEMATICS
-+
-+780. VANESSA OF GENO'S
-+33
-+--- PAGE 34 ---
-+781. JORDAN OF HORSE CULTS
-+
-+782. DEAD
-+
-+783. STEPH OF EQUANIMITY
-+
-+784. Ε.Ρ.Μ.
-+
-+785. ALEX OF REAL TRUTH
-+
-+786. SIDNEY OF AGENCY
-+
-+787. DAVID OF HARD TRUTHS
-+
-+788. KAT OF THE OM IN THE AIR
-+
-+789. SAM, THE SEWER RAT MEME HISTORIAN
-+
-+790. MYF OF THE NETHERWORLD
-+
-+791. RONDELL OF QUEENS
-+
-+792. ALLISON OF REST
-+
-+793. KYRON THE ARTITECT
-+
-+794. MEG OF SMALL SOCIAL KINDNESSESS
-+
-+795. HOLLIS OF THE SUPER POWERS
-+
-+796. CARLEIGH OF WATERFORD
-+
-+797. ALEXANDER OF THE COAST
-+
-+798. APOLLONI OF PROSPERITY
-+
-+799. DIRTY MAN 222
-+
-+800. BREE OF PEACE
-+
-+801. ΚΑΙ OF BAR TENDERNESS
-+
-+802. ANDRE OF QUALITY
-+
-+803. ANAIS OF PLAYLISTS
-+
-+804. AJ OF APPLE JUICE
-+
-+805. CHARLES OF JELLYNESS
-+
-+806. SAM OF MAJOR KINDNESS
-+
-+807. DREW OF COMFORT
-+34
-+--- PAGE 35 ---
-+808. THE WERHEIMS OF RANK CHOICE VOTING AND ABORTION
-+
-+809. ALPHA OF WEED
-+
-+810. GIGI OF BUBBLING KINDNESS
-+
-+811. MATT OF HONESTY
-+
-+812. BOBBY OF DAIQUIRIS
-+
-+813. JULIANNA OF HOPE
-+
-+814. FRANCESCA OF CONCRETE
-+
-+815. JEFF OF DISMANTLING THE AMERICAN EMPIRE
-+
-+816. ANNALIISA THE ADVOCATE
-+
-+817. AGATHA OF PEACE ON EARTH
-+
-+818. ALISSA OF NOWADAYS
-+
-+819. ZACH OF BEING HOT
-+
-+820. GLEN OF THE SOUND
-+
-+821. KAT OF NATURE
-+
-+822. BRIAN OF BK HUSBAND
-+
-+823. MIRANDA OF BLUE COMPASSION
-+
-+824. SQUARE DESIGN
-+
-+825. HENRY OF SOUL SEARCHING
-+
-+826. ΝΑΤΕ OF DEFLECTION
-+
-+827. DANIAL THE FISHERMAN
-+
-+828. TERRENCE OF THE FUTURE INTERIOR
-+
-+829. YONI OF US
-+
-+830. WILLIAM THE LUSH
-+
-+831. SHERRI OF FUN
-+
-+832. LILITH OF THE WERIDOS
-+
-+833. DANNAH OF GOOD FOOD AND WONDERFUL VIBES
-+
-+834. CHARLIE OF THE INSTANT MOMENT
-+35
-+--- PAGE 36 ---
-+835. ALIYA OF THE SEA
-+
-+836. AMELIA OF INTUITION
-+
-+837. JAIME OF MYSELF
-+
-+838. ERIN, THE CUNTRESS
-+
-+839. KIWI OF CHALLENGING BEAUTY
-+
-+840. RAQUEL OF GOTH JAP QUEEN
-+841. JAY OF ATARAXIA
-+
-+842. LUCY OF JACK SHIT
-+
-+843. ZACK THE DRAWER
-+844. CANDICE, I'M OUT BITCH
-+
-+845. MIKE OF SOCIAL JUSTICE
-+
-+846. KATHY OF COMPASSION
-+
-+847. NICK OF FRIENDSHIP
-+
-+848. IN THE CARE OF L.O.Τ.Ι.Ο.Ν.
-+
-+849. DAVID THE SWORDSMAN
-+
-+850. NEIGHBORS BLAZE & MICHAEL
-+
-+851. CHRIS OF OPTIMISTIC NIHILISM
-+852. AJAX OF INEGRITY
-+
-+853. CALLI OF ENVIRONMENTALISM
-+
-+854. ALEX THE UPLIFTER
-+
-+855. EMILY THE ARTIST
-+
-+856. EMILY OF THE FAE
-+
-+857. MOSS OF LEATHER
-+858. DELANY OF INTERDEPENDENCE
-+
-+859. SYDNEY OF UNDERSTANDING
-+
-+860. TV EYE (IN THE CARE OF DIEGO)
-+
-+861. GREG OF NOT MUCH
-+36
-+--- PAGE 37 ---
-+862. JANNIK OF LAUGHTER
-+
-+863. IN THE CARE OF TEDDY
-+
-+864. MARIANO OF SMALL EVERYDAY STRUGGLES
-+
-+865. EMMANUELLA OF A FREE PALESTINE
-+
-+866. MAYA OF DISABILITY JUSTICE
-+
-+867. INTI OF A FREE PALESTINE
-+
-+868. SAM OF ANARCHIC JUSTICE
-+
-+869. ANZ OF BALANCE
-+
-+870. HILLARY OF SERVING OTHERS
-+
-+871. ELIJAH OF LIBERATION
-+
-+872. NATE OF HEDONISM
-+
-+873. SEPEHR OF KHAVAAR
-+
-+874. GRANT OF PURSUING
-+
-+875. SATURN OF BRIDGES
-+
-+876. TSEDEY OF DECENCY
-+877· BEIGE
-+
-+878. JORDAN OF EXPRESSION
-+
-+879. RICHARD OF THE PRESENSE
-+
-+880. DANICA OF AUTHENCITY AND COMMUNITY
-+
-+881. JENN OF THE LOVING TAMALE
-+
-+882. MOOD RING
-+
-+883. THE Kos
-+
-+884. KATIE OF COMMUNITY
-+
-+885. GREGORY HORNDESKI
-+
-+886. ERIC OF GEOGRAPHY
-+
-+887. LEON THE LION
-+
-+888. THE LIGHTHOUSE
-+37
-+--- PAGE 38 ---
-+889. RITA OF JUSTICE & PEACE
-+
-+890. DJ VOICES
-+
-+891. ELLE OF ANXIOUS LOYALTY
-+
-+892. AMELIA OF MYSTERIOUS LOVE
-+
-+893. NASHWAN OF LONG LIVED SOCIAL ANXIETY
-+
-+894. 88TH & EAST RIVER
-+
-+895. VERONICA OF HEARTVILLE
-+
-+896. CHELSEA OF COASTAL AWE
-+
-+897. 88TH & HUDSON RIVER
-+
-+898. LEO OF THE FREE SPIRIT
-+
-+899. GUSTAVO OF DESIGN
-+
-+900. KYLE OF HOPE
-+
-+901. PATRICK THE GNOMAD
-+
-+902. SAM OF BARTERING
-+
-+903. CECI OF THE FUNKY LAMB
-+
-+904. ELI OF CORE HEDONISM
-+
-+905. ASHLEY OF DELIGHT
-+
-+906. TEDDY OF NOTHING AND FALLING FOR EVERYTHING
-+
-+907. AYANA OF THE QUEERS
-+
-+908. NORA ILLUMINATION
-+
-+909. MIA OF WALKING
-+
-+910. FRANCESCAE OF HELP!
-+
-+911. ELIAS OF UNKNOWN UNKNOWNS
-+
-+912. MOISHE OF ETERNAL LOVE
-+
-+913. ANDRAS OF SCIENCE
-+
-+914. DANI THE SEA URCHIN
-+
-+915. SHARIF OF FREE ASSOCIATION
-+38
-+--- PAGE 39 ---
-+916. JACOB OF UNCERTAINTY
-+
-+917. CHRIS OF HUGS
-+
-+918. CHRIS OF INNOVATION
-+
-+919. JOE OF LYFT
-+
-+920. LINDSEY OF CATS
-+
-+921. ANDRE OF THE DYING
-+
-+922. VINO VERITAS
-+
-+923. LINI OF METAL
-+
-+924. FEHÉRLÓ THE WILDFLOWER
-+
-+925. KENDYLL OF THE (NOT SO) BENIGN ABSURDITY OF LIFE
-+
-+926. ΝΙΑΜΗ
-+
-+927. RANCYD OF HOTDOGS
-+
-+928. BLACKFOOT THE STRAY
-+
-+929. BEAR OF THE METAL GODS
-+
-+930. VINN, CHANGLING WARLORD
-+
-+931. MISTRESS OF CAUTION
-+
-+932. IN THE CARE OF CHAOS
-+
-+933. SAL OF "ANYTHING"
-+
-+934. JAS OF EATING ASS
-+
-+935. ANGEL OF STREET JUSTICE
-+
-+936. CASOER THE TENACIOUS
-+
-+937. NAYA OF SURVIVING LIFE
-+
-+938. VIOLET OF MAGIC
-+
-+939. SUSAN OF THE DESERT REY
-+
-+940. KIRK OF JUSTICE + EQUALITY
-+
-+941. DANI OF FEMINISM
-+
-+942. MELISSA OF COLLECTIVE COMMUNITY
-+39
-+--- PAGE 40 ---
-+943. DERRICK OF LOVE
-+
-+944. IAN, THE GODFATHER OF ULTRA HEAVY
-+
-+945. CORY, "NXT CHAMPION OF THE WORLD"
-+
-+946. JO THE LIFE LOVER
-+
-+947. FERGUS OF FRESH AIR
-+
-+948. KK OF THE PERFORMING ARTS
-+
-+949. SUKHDEV OF BLUEBOY
-+
-+950. COLLINS THE QUEEN OF HEAVEN
-+
-+951. INES OF NOT BEING A PIECE OF SHIT
-+
-+952. ADELE OF DANCEFLOOR
-+
-+953. PATRICK OF FACE
-+
-+954. SHAMEL OF ENERGY
-+
-+955. WES THE SEEDY MONSTER
-+
-+956. JARVA THE POET
-+
-+957. HONEY (IN THE CARE OF RILEY)
-+
-+958. SABINE OF LAUGHTER
-+
-+959. LILY OF ANIMAL RIGHTS
-+
-+960. RHIANNON OF HAIKU
-+
-+961. FRANK OF SLUT PRIDE
-+
-+962. KEITH OF IRISH REPUBLICANISM
-+
-+963. MAMA TRIED (AGAIN)
-+
-+964. STAR OF SPLITS
-+
-+965. JOHN OF NOWADAYS
-+
-+966. JAIME THE BOIKA
-+
-+967. HELENA HAUFF
-+
-+968. TREMAIN OF LIFE
-+
-+969. MYLO OF EMPATHY
-+40
-+--- PAGE 41 ---
-+970. PHYSICAL THERAPY
-+
-+971. BEN OF BROKEN BEATS
-+
-+972. INTROSPEKT
-+
-+973. VIRGINA OF MARVELLA
-+
-+974. AUGUSTINE THE SAVAGE
-+
-+975. DEEPCHORD
-+
-+976. CHRIS OF RADICAL COMMUNITY
-+
-+977. MEL OF TATTOO
-+
-+978. HANNAH THE ETHEREAL
-+
-+979. DONNY THE DOCUMENTS GUY
-+
-+980. JON OF SUFFERINGLESSNESS
-+
-+981. 420 FRIENDLY
-+
-+982. MARQUIS OF THE RIGHT TO THE FREEDOM BE
-+
-+983. MERRAY OF JUSTICE & BEAUTY
-+
-+984. SAM OF VIBING IT OUT
-+
-+985. AINSEL OF PERCEPTION
-+
-+986. ZOE OF EARNEST NERDOM
-+
-+987. CODA OF DEVOTION
-+
-+988. SABINE, COUNTRY GOTHIC
-+
-+989. MARK OF E-GIRL
-+
-+990. ELIAS OF THE AVANT-GARDE
-+
-+991. BENITO OF GROWTH
-+
-+992. VANGUARD (IN THE CARE OF JOHN)
-+
-+993. DERYK OF INTROSPECTION
-+
-+994. IAN OF GENEROSITY
-+
-+995. ATARI OF LIFE
-+
-+996. IRIS OF CLEAR SIGHT
-+41
-+--- PAGE 42 ---
-+997. COBRA CLUB
-+
-+998. KYLE OF THROWING THINGS THROUGH WINDOWS
-+
-+999. DESK
-+
-+The 999ights: 999_1-999_64 
-+
-+In an action of limitation, a series of 64 plights were set with a purple 999 on
-+ their bottom face. These were plighted along with a question:
-+ "What does the world need more of?"
-+
-+9991. DAVID SELF-REFLECTION
-+
-+9992. COMRADE CAV TIME TO CHILL
-+
-+9993. TAYLOR PEOPLE LIKE TAMMY
-+
-+9994. ALEX CYBERSOCIALISM
-+
-+9995. ADIAN: PEACE
-+
-+9996. KAREN: LOVE
-+
-+9997. JADA: LIGHT-HEARTED PEOPLE
-+
-+9998. AARON COMPASSION
-+
-+9999. DEVOYE CONNECTION, BALANCE, COMMUNICATION, AND UNDER-
-+STANDING
-+
-+99910 ALI: THIS
-+
-+99911 MARE LESS ASSHOLES
-+
-+99912 JOSE ACCEPTANCE
-+
-+99913 VICK PEACE & LOVE
-+
-+99914 CHRIS: MAINTAINERS
-+
-+99915 REDEVOYED
-+
-+99916 PAULIE TRANS WOMEN
-+
-+99917. NICK GRACE
-+
-+99918 PHOEBE CLEAN SOIL
-+
-+99919. CLARA COOPERATION & ABSURDISM
-+42
-+--- PAGE 43 ---
-+99920 YOSHIKO: ROCK BOTTOMS
-+
-+99921 IAN: LOVE
-+
-+99922 RENEE: JUSTICE
-+
-+99923. GISELLE COMMUNITY
-+
-+99924 JOSH COMPASSION
-+
-+999_25 EVE: PATIENCE
-+
-+999_26 ADITIYA CRITICAL THOUGHT
-+
-+999_27 STEVE MOVIE THEATERS
-+
-+99928 LORENZO: CEMENT
-+
-+99929 MARCO COMPASSION
-+
-+99930 KILOPATRAH: LOVE
-+
-+99931. KRISTINA: WATER
-+
-+99932. SAMUEL CAUSAL BUT INTENTIONAL LOVE
-+
-+99933 SEAN: LISTENING TO UNDERSTAND
-+
-+99934. MIKE (SERVITO): HUMANITY
-+
-+99935 JELANI: TOUGH LOVE
-+
-+99936 RON COMMUNITY
-+
-+99937 GHE: STILL
-+
-+999_38 KIRIN: LISTENING
-+
-+999_39 SENAIDA: GARDENING
-+
-+999_40 TÉA: CURIOSITY
-+
-+99941 OSCAR: COMMUNITY
-+
-+99942. CHARLOTTE: FUN
-+
-+999.43 PAUL SEX WORKERS
-+This plight placed key to Earthly Delights, finding its way directly to
-+ the hands of a sex worker.
-+
-+99944. TIERNAN COMPASSION
-+
-+99945 CONCRETE HUSBAND COMPASSION
-+43
-+--- PAGE 44 ---
-+99946 TY: HONESTY
-+
-+99947. CHRISTIAN: JUSTICE
-+
-+99948. DJ MFA LESS PEOPLE
-+
-+99949. LORDIIE: LOVE
-+
-+99950 ELIO: KETAMINE
-+
-+99951 JADE BLAKE ACCEPTANCE
-+
-+99952 AVALON: PATIENCE
-+
-+99953 PHILIP: MELDING
-+
-+99954 EMILIA: TIME
-+
-+99955 ALEX: COMMUNITY
-+
-+99956 FILIPE: MUSIC
-+
-+99957. SHAUN ACCEPTANCE
-+
-+99958 SONNY: LOVE
-+
-+99959. TIM: SAFE SPACES
-+
-+99960 JOHN: TREES
-+
-+99961. CHRISTIAN: PEACE
-+
-+99962 JIWON: MAGIC
-+
-+99963 BENCE AUTHENTICITY
-+
-+99964. THEO PARRISH LIGHTERS IN CEMENT CUBES
-+
-+One Thousand: 1,000
-+
-+Plight 1,000 was set on the dancefloor of Dehanta on September 8th, 2024,
-+ the first day of the 152th Pataphysical year.
-+
-+1000. BOXED
-+EARTH
-+2022
-+now
-+`; // End of pdfFullText placeholder
-+
-+        let allLedgerEntries = [];
-+
-+        function parseLedgerData(fullText) {
-+            const entries = [];
-+            let activeEntry = null;
-+            const lines = fullText.split('\n');
-+
-+            const ignorePatterns = [
-+                /^--- PAGE \d+ ---$/, /^The Ledger$/i, /^ERNST UNDING$/i,
-+                /^First in Plight:/i, /^In Mundo:/i, /^The 999ights:/i, /^One Thousand:/i,
-+                /^\s*$/ // Empty lines
-+            ];
-+            
-+            const pageNumLinePattern = /^\s*[0-9]+\s*$/; // Matches lines that are only numbers (page numbers)
-+
-+            // Pre-processing to handle specific quoted formats and malformed lines
-+            const processedLines = [];
-+            for (let i = 0; i < lines.length; i++) {
-+                let line = lines[i];
-+                let originalTrimmedLine = line.trim();
-+
-+                let match = originalTrimmedLine.match(/^"(\d+\.)","(.*)"$/); // "NUM.","TITLE"
-+                if (match) {
-+                    processedLines.push(match[1] + " " + match[2]);
-+                    continue;
-+                }
-+
-+                match = originalTrimmedLine.match(/^"(\d+\.)","(.*)$/); // "NUM.","TITLE_PART (no closing quote on this line)
-+                if (match) {
-+                    processedLines.push(match[1] + " " + match[2]); 
-+                    let j = i + 1;
-+                    while (j < lines.length) {
-+                        const descLineTrimmed = lines[j].trim();
-+                        if (descLineTrimmed === '"') { 
-+                            i = j; 
-+                            break;
-+                        }
-+                        // Only add non-empty description lines
-+                        if (descLineTrimmed !== "") processedLines.push(lines[j]);
-+                        j++;
-+                        if (j === lines.length) { 
-+                            i = j - 1;
-+                        }
-+                    }
-+                    continue;
-+                }
-+                
-+                if (originalTrimmedLine === '"48.') { 
-+                    processedLines.push("48. "); 
-+                    continue;
-+                }
-+                if (originalTrimmedLine.startsWith('49.","')) { 
-+                    processedLines.push(originalTrimmedLine.replace('49.","', "49. "));
-+                    continue;
-+                }
-+
-+                const combinedEntryPattern = /^(\d+)-?\s*([A-Z].*)/i;
-+                match = originalTrimmedLine.match(combinedEntryPattern);
-+                if(match && !originalTrimmedLine.includes('.')) {
-+                    const potentialNextLine = (i + 1 < lines.length) ? lines[i+1].trim() : "";
-+                    if (potentialNextLine && /^[A-Z]/.test(potentialNextLine) && !potentialNextLine.match(/^(\d+)\./)) {
-+                        processedLines.push(match[1] + ". " + potentialNextLine);
-+                        i++; 
-+                        continue;
-+                    } else if (!match[2].match(/^(\d+)\./) && match[2].length > 3) {
-+                        processedLines.push(match[1] + ". " + match[2]);
-+                        continue;
-+                    }
-+                }
-+
-+                processedLines.push(line); 
-+            }
-+            
-+            for (const lineContent of processedLines) {
-+                const trimmedLine = lineContent.trim();
-+                const lineForEntryMatch = lineContent.trimStart();
-+
-+                let isIgnoredLine = false;
-+                for (const pattern of ignorePatterns) {
-+                    if (pattern.test(trimmedLine)) {
-+                        isIgnoredLine = true;
-+                        break;
-+                    }
-+                }
-+                if (isIgnoredLine) continue;
-+
-+                if (pageNumLinePattern.test(trimmedLine)) {
-+                    const numVal = parseInt(trimmedLine);
-+                    if (numVal > 0 && numVal < 60) {
-+                        if (!activeEntry || (entries.length > 0 && entries[entries.length -1].id !== (activeEntry ? activeEntry.id : null))) {
-+                           continue;
-+                        }
-+                    }
-+                }
-+                
-+                const entryRegex = /^(\d+)\.\s*(.*)/; 
-+                const entryMatch = entryRegex.exec(lineForEntryMatch);
-+
-+                if (entryMatch) {
-+                    if (activeEntry) {
-+                        activeEntry.description = (activeEntry.description || "").replace(/\s+/g, ' ').trim();
-+                        if (activeEntry.id) entries.push(activeEntry); 
-+                    }
-+                    activeEntry = {
-+                        id: entryMatch[1],
-+                        title: entryMatch[2].trim(),
-+                        description: ''
-+                    };
-+                } else if (activeEntry) {
-+                    if (trimmedLine !== "" && trimmedLine !== '"') {
-+                        activeEntry.description = ((activeEntry.description || "") + ' ' + lineContent.trim()).trim();
-+                    }
-+                }
-+            }
-+
-+            if (activeEntry && activeEntry.id) {
-+                activeEntry.description = (activeEntry.description || "").replace(/\s+/g, ' ').trim();
-+                entries.push(activeEntry);
-+            }
-+            
-+            const entry765index = entries.findIndex(e => e.id === "765");
-+            if (entry765index !== -1 && entries[entry765index + 1] && entries[entry765index + 1].id === "765") {
-+                if(entries[entry765index+1].description){
-+                    entries[entry765index].description += (entries[entry765index].description ? " / " : "") + "JORDAN OF DEATH: " + entries[entry765index+1].description;
-+                } else {
-+                    entries[entry765index].description += (entries[entry765index].description ? " / " : "") + "JORDAN OF DEATH";
-+                }
-+                entries[entry765index].title += " / JORDAN OF DEATH";
-+                entries.splice(entry765index + 1, 1);
-+            }
-+
-+            return entries;
-+        }
-+
-+
-+        function displayEntries(entriesToDisplay, searchTerm = "") {
-+            const container = document.getElementById('ledgerEntries');
-+            container.innerHTML = '';
-+
-+            if (entriesToDisplay.length === 0) {
-+                container.innerHTML = '<p class="text-center text-gray-500">No entries found.</p>';
-+                return;
-+            }
-+            
-+            const searchRegex = searchTerm ? new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi') : null;
-+
-+            entriesToDisplay.forEach(entry => {
-+                const entryDiv = document.createElement('div');
-+                entryDiv.className = 'ledger-entry';
-+
-+                let idHTML;
-+                let titleHTML = entry.title;
-+                let descriptionHTML = entry.description || '';
-+
-+                const subMatch = entry.id.match(/^999(\d+)$/);
-+                if (subMatch) {
-+                    const base = searchTerm && searchRegex ? '999'.replace(searchRegex, m => `<span class="highlight">${m}</span>`) : '999';
-+                    const sub = searchTerm && searchRegex ? subMatch[1].replace(searchRegex, m => `<span class="highlight">${m}</span>`) : subMatch[1];
-+                    idHTML = `${base}<sub>${sub}</sub>.`;
-+                } else {
-+                    idHTML = entry.id + '.';
-+                    if (searchTerm && searchRegex) {
-+                        idHTML = entry.id.replace(searchRegex, match => `<span class="highlight">${match}</span>`) + '.';
-+                    }
-+                }
-+
-+                if (searchTerm && searchRegex) {
-+                    titleHTML = entry.title.replace(searchRegex, match => `<span class="highlight">${match}</span>`);
-+                    if (entry.description) {
-+                        descriptionHTML = entry.description.replace(searchRegex, match => `<span class="highlight">${match}</span>`);
-+                    }
-+                }
-+                
-+                const idEl = document.createElement('span');
-+                idEl.className = 'entry-id';
-+                idEl.innerHTML = idHTML;
-+
-+                const titleEl = document.createElement('span');
-+                titleEl.className = 'entry-title';
-+                titleEl.innerHTML = titleHTML;
-+                
-+                const headerDiv = document.createElement('div');
-+                headerDiv.className = 'flex items-baseline';
-+                headerDiv.appendChild(idEl);
-+                headerDiv.appendChild(titleEl);
-+                entryDiv.appendChild(headerDiv);
-+
-+                if (entry.description) {
-+                    const descriptionEl = document.createElement('p');
-+                    descriptionEl.className = 'entry-description';
-+                    descriptionEl.innerHTML = descriptionHTML;
-+                    entryDiv.appendChild(descriptionEl);
-+                }
-+                container.appendChild(entryDiv);
-+            });
-+        }
-+
-+        document.addEventListener('DOMContentLoaded', () => {
-+            allLedgerEntries = parseLedgerData(pdfFullText);
-+            displayEntries(allLedgerEntries);
-+
-+            const searchInput = document.getElementById('searchInput');
-+            searchInput.addEventListener('input', (e) => {
-+                const searchTerm = e.target.value.toLowerCase();
-+                if (!searchTerm) {
-+                    displayEntries(allLedgerEntries);
-+                    return;
-+                }
-+                const filteredEntries = allLedgerEntries.filter(entry => {
-+                    return (entry.id && entry.id.toLowerCase().includes(searchTerm)) ||
-+                           (entry.title && entry.title.toLowerCase().includes(searchTerm)) ||
-+                           (entry.description && entry.description.toLowerCase().includes(searchTerm));
-+                });
-+                displayEntries(filteredEntries, searchTerm);
-+            });
-+        });
-+
-+    </script>
-+</body>
-+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ledger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script type="text/javascript">WebFont.load({  google: {    families: ["Bitter:400,700,400italic","Geologica:regular","Space Grotesk:regular","Jost:regular,italic","Ysabeau:regular,italic","Urbanist:regular,italic"]  }});</script>
+    <style>
+        body {
+            font-family: "Space Grotesk", "Urbanist", sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .ledger-entry {
+            border-bottom: 1px solid #cccccc;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+        .ledger-entry:last-child {
+            border-bottom: none;
+        }
+        .entry-id {
+            font-weight: bold;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        .entry-title {
+            font-weight: bold;
+        }
+        .entry-description {
+            margin-top: 4px;
+            font-size: 0.9em;
+            color: #333333; /* Slightly lighter black for description for contrast */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .highlight {
+            background-color: #d1d5db; /* Light gray for highlighting search matches */
+            font-weight: bold;
+        }
+        /* Ensure input text is black on white */
+        input[type="text"] {
+            color: #000000;
+            background-color: #ffffff;
+            border: 1px solid #000000;
+        }
+    </style>
+</head>
+<body class="bg-white text-black min-h-screen p-4 md:p-8">
+    <div class="container mx-auto max-w-3xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold">The Ledger</h1>
+        </header>
+
+        <div class="mb-6">
+            <input type="text" id="searchInput" placeholder="Search by name or number..." class="w-full p-3 border border-black rounded-md shadow-sm focus:ring-black focus:border-black text-black bg-white">
+        </div>
+
+        <div id="ledgerEntries" class="bg-white p-0 md:p-6 rounded-md">
+            <!-- Entries will be dynamically inserted here -->
+        </div>
+
+        <footer class="text-center mt-12 text-xs text-gray-600">
+            <p>Parsed from "The Ledger" by Ernst Unding.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Full text from the PDF needs to be pasted here
+        // Due to the large size of the PDF content, it's included in a separate script block below.
+        // This is a placeholder for where the full text would be defined.
+        const pdfFullText = `
+--- PAGE 1 ---
+
+The Ledger
+
+ERNST UNDING
+
+--- PAGE 2 ---
+
+First in Plight: 1-64 
+
+The original 64 plights were crafted and held in a deep space starting December
+ of 2022. They were made available for sale. A portion of the early plights were
+ reclaimed and are held in BOX and ALSO BOX, denoted below as "Boxed."
+ The uncollected, remain (or not) in deep space and are entered as such.
+
+1. JAY OF THE MIDNIGHT SUNSET
+The beautiful end will echo a beautiful beginning.
+
+2. BOXED
+This one begs to be stolen. If you have the means, please do so. It is
+ currently on my bookshelf next to Anne Garreta's In Concrete.
+
+3. BOXED
+
+4. PAUL OF REFLECTION
+cf. plight 999_43 for an aspect of Paul's reflection.
+
+5. HAPPYFUN HIDEAWAY
+
+6. NARROWS
+
+7. LUKAS THE LOKUST
+
+8. MILOSZ KOZIEJ
+
+9. ALLISON & SAM PULLIN
+See me after class.
+
+10. STRATA OF ABSURDISM
+
+11. ARUSHI OF ORIGINAL THOUGHT
+
+12. RYAN BOCK
+
+13. BOXED
+Naturally, the number has fallen off.
+
+14. XAVIER OF PEACE
+
+15. DANNY OF ONESELF
+
+16. TERRI THE GROWER
+2
+--- PAGE 3 ---
+17. RITA JIMENEZ
+It is expected, that if Rita were given the chance, she would have given
+ the title "of Iritadescent." Alas, it is only held here, in the layered
+ textures of the archival.
+
+18. REMY HARRIS
+See me after class.
+
+19. ADRIANA POLITIS
+Widely considered to be the greatest patron.
+
+20. DEEP SPACE?
+
+21. THE CONEY ISLAND KID
+
+22. DEEP SPACE?
+
+23. CAI THE WARRIOR
+
+24. SAM OF SATAN
+
+25. ADRIANA POLITIS
+Oh blessed be Adriana of the Keen Eye!
+
+26. PRINCESS PEGGY
+
+27. NANO OF SPORT
+Plighted as recompensation for playing the squire during the act of Ce-
+ mentus Set. The pour pour lad knew not what trials he committed
+ to, but remains a true co-creator of the first of the Works. He was an
+ incredible Sport.
+
+28. SAMIR OF EMPATHY
+
+29. BRYAN OF EASY, BREEZY, BEAUTIFUL
+On the Taurus moon of 2023, plights no. 29, 52, 58, 60, and 63 were
+ brought into the world for their plighting. Upon entry into the cage of
+ Pet Shop, an agent of Janus, a keeper of thresholds, an old friend was
+ found.
+
+30. ALEX OF CRAFT
+
+31. KIOWA HAMMONS
+
+32. PUFF OF NO SUFFERING
+
+33. MARIAN OF CATS
+
+34. ADRIANA POLITIS
+Praise be to Adriana of the Golden Light!
+3
+--- PAGE 4 ---
+35. DEEP SPACE?
+
+"36.","609 ROGERS AVE"
+"37.","BLVCK TRUFFLE AT 38
+ A syzygetic plighting of conquered age on the occasion of his 38th birth-
+ day.
+"
+"38.","DEEP SPACE?"
+"39.","DEEP SPACE?"
+"40.","WHOSVLAD, THE ARTIST
+ Plighted during Cementus Set for the generousity of physical and emo-
+ tional stability in the form of a few two-by-fours and wisdom.
+"
+"41.","GAZOO TO THE MOON"
+"42.","ALIDA OF LIBERATION"
+"43.","DEEP SPACE?"
+"44.","DANTE OF THE INFERNO
+ Dante holds the distinction of the first recognized. The profane purchase
+ of the plight was witnessed and having been so, was graced with the
+ knowledge of the weight to bear. So entered all into the inferno.
+"
+"45.","Natalie of Racoon Whispher
+ Adjacent artist during Cementus Set. She proffered outdoor tape which,
+ in retrospect, would have been a great boon. Gift givers must learn to
+ accept them as well.
+"
+"46.","JAMES OF UNIVERSAL BREAKFAST"
+"47.","STEVEN OF ATTACHMENT + DETACHMENT"
+"48.
+49.","DEVIN OF FLUIDITY
+ DEEP SPACE?"
+"50.","GIGI CHEN"
+"51.","HUGH DOCHERTY
+ See me after class.
+"
+"52.","RAFFZILLA OF LOYALTY
+ Plight no. 52 was the first to consume its own numeration, thus, pun-
+ fortunately, it was dubbed the "Weekest." Raffzilla on the other hand is
+ perhaps the strongest.
+"
+4
+--- PAGE 5 ---
+53. MARTINA OF PAINTING
+Adjacent artist during Cementus Set. Held a mutual moment of the
+ mystic over a Tarot reading. Call me. My number is 1.
+
+54. NAMES (IN THE CARE OF BRANDON)
+
+55. PLO MAN
+
+56. DAM PF CHAOS
+
+57. CPT. DAN'S GOOD TIME TAVERN
+
+58. MICHAEL & ROGER, THE DREAM TEAM
+As two horns of the bull, these sages entered into the evening of the
+ Found&Future Halloweekend precisely on cue.
+
+59. DEEPSPACE?
+
+60. RENE OF MEXICO
+Presented on that bullish eclipse as a fare-thee-well on his pursuit of a
+ place closer to the title, Texas.
+
+61. IN THE CARE OF PROMETHEUS JOY
+
+62. ADRI OF HAPPINESS
+
+63. LEX OF ART
+Glory unto the fivefold-borough night of the endless beat.
+
+64. CHAR OF LIMINAL SPACE
+01110111011010000111100100100000011000110110100001101111
+01101111011100110110010100100000001100010011000000100000
+01110111011010000110010101101110001000000111100101101111
+01110101001000000110001101101111011101010110110001100100
+00100000011010000110000101110110011001010010000000110001
+001100000011000000110000001100000011000000100000
+00101000011100110111010101110000001011000010000001101110
+01100101011100100110010000101001
+
+In Mundo:65-954
+
+65. ADAM OF PARKOUR
+Truly the first man.
+
+66. HAVEER OF ESTATE
+
+67. JARED (SPIKE) SORENSON
+The plight was set using the Major form despite being Minor.
+5
+--- PAGE 6 ---
+68. MARIA OF THE ABYSS
+
+69. KIP OF LAST PLACE
+The grapevine suggests that this was further gifted again the same night
+ in the time honored pursuit of tail. Reports do not indicate the success
+ of the hunt.
+
+70. JAY OF OTHER
+
+71. G OF GAS
+
+72. DAVID OF COMICS
+
+73. BRIAN OF THE BOG OF ETERNAL STENCH
+
+74. MAUREEN OF NEIGHBOR
+
+75. NATHANIEL OF JEWEL BOX
+
+76. SAM MACDUFFIE OF BIRTH
+
+77. SPENCER OF AIR
+
+78. KIRA OF FART JOKES
+
+79. HANNAH OF IBS
+
+80. PORTLAND ZOO
+
+81. JENNIFER (MURPHY) OF CHILDREN
+
+82. SEAN OF SHAMANISM
+
+83. YOSSRA OF PANTS DECOMPOSITION
+
+84. STEEN OF PIZZA
+
+85. BECKETT
+
+86. JASON OF CHEESEBURGERS
+
+87. PROFESSOR FUZZ
+
+88. THE NIGHT
+
+89. ???
+
+90. GEORGE OF TOYOTA
+
+91. USMAN OF HOLLYMAN
+
+92. JESSENIA OF HOLD MY BEER
+6
+--- PAGE 7 ---
+93. LAISA OF SALTING
+
+94. STEVEN OF COFFEE LAND
+
+95. SPRING BAR
+
+96. ALLISON OF JUPITER
+
+97. MATT OF PACE
+
+98. ARTISTIC SMOKE SHOP
+
+99. PALOMA OF PIPBOMB
+
+100. ARABELLA VON ARX
+
+101. JUSTIN OF NOTHINGNESS
+
+102. ???
+
+103. JAMES OF ZOBI
+
+104. JON ARONSON
+
+105. CONNOR OF CONNOR OF ?Redindney?
+The first in a long line of illegible entries which the future may decipher
+
+106. JAY OF PEE
+
+107. STEVE OF STEVE
+
+108. THE MECKLERS
+
+109. LIAM OF WITS
+
+110. LIZZEE OF 110
+
+111. THE WALLOWS
+
+112. IONE BARROWS
+
+113. ANYA OF STOMACH ACHE
+
+114. ANYA OF QUEENS
+Forgotten at the site of plighting and held as her own by Ingrid Norton.
+
+115. TAMA OF THE WORLD
+
+116. JEREMY OF LINES
+
+117. MYSTERY LOVERS
+
+118. TAYLOR OF UNITED AIRLINES
+7
+--- PAGE 8 ---
+119. ROBYN OF HOOD
+
+120. SAMANTHA OF ITALY
+
+121. KEVIN OF FRIENDSHIP
+
+122. REESE OF THE LION
+
+123. DEVONTA OF KING OF KINGS
+
+124. ELLA OF THIS
+
+125. ERIC OF VIRILE
+
+126. IN THE CARE OF JEREMY
+The first given to be given again.
+
+127. WILLIAM LOGAN
+
+128. ROLANDO OF THE NORTH EAST
+The sacred 128=2^7 was misplaced and 127 went to Rolando. Sean
+ultimately went unplighted, for now.
+
+129. SEAN OF THE MILKY WAY
+See above.
+
+130. LYDIA OF PARTY
+
+131. KATIE OF WHAT
+
+132. MOMA PROTESTER
+
+133. LAUREN OF TEXAS
+Originally in the care of Jeremy
+
+134. BEN HOWARD OF RIGHT ROUND
+
+135. LAZARUS BREWING Co.
+
+136. SEAN OF SCURRY (WORKHORSE)
+
+137. STOLEN
+Pauli cried.
+
+138. ATUSONJE OF THE FUTURE
+
+139. SARAH OF RIGHTROUND
+
+140. AIMEE OF WHITE PEOPLE
+
+141. TERRY FROM THE NOC
+8
+--- PAGE 9 ---
+142. SIR GNARLES OF BURLYBROOK
+
+143. MICHALA OF RIGHTROUND
+
+144. BAR FLYS
+Contains a laminated booger. GROSS!
+
+145. KEVIN OF AIRPLANES
+
+146. BRUCE OF TEXAS
+
+147. ZORA OF AUSTIN
+
+148. HOLLY OF TIGRESS
+
+149. MARK OF ROGAN COMEDY CLUB
+
+150. BRADON FROM BLOOD BLACK NOTHINGNESS BEGINS TO SPILL
+
+151. DEAR UNCLE CLIFF
+
+152. SIDE BAR
+
+153. BUCKSHOT
+Mistakenly numbered 154.
+
+154. WADE OF COOPER'S BBQ
+
+155. DANI OF THE NETHER
+
+156. JAMES OF MAIFA
+
+157. NICOLA OF HAPPINESS
+
+158. SPADE
+
+159. MALIK OF THE TRUTH
+
+160. KELLY OF DREAMLAND
+
+161. JOLENE OF BRUNEI
+Written in pen..
+
+162. SXSW DROP IN EXPO HALL
+
+163. OGHASAIKHIN OF HOUSE OF NEHIKHNERE
+
+164. JOSHUA OF DUNGEON TAPE
+
+165. JOSEPH OF ATX
+
+166. SXSW DROP AT EMPIRE
+This plight grew to some fame on the event's Reddit page.
+9
+--- PAGE 10 ---
+167. LAMENT
+
+168. ROMAN OF NORTH LOOP
+
+169. JESSICA WINTER
+
+170. JOE OF OYSTERS
+
+171. "KAT" OF FORTY TWO
+
+172. AUGUSTINE
+
+173. THE LOW DOWN
+
+174. HENRY OF ENGLISH
+
+175. KAITLYN OF THE CORN
+
+176. REVENGE WIFE
+
+177. NTSKI
+
+178. CREEPING DEATH
+
+179. BE YOUR OWN PET
+
+180. UPLIFTED GROUND
+
+181. YAEL OF LATTÉ
+
+182. VCTMS (OF 182)
+The plighted remarked that Blink 182 was her favorite band.
+
+183. ESCEULA GRIND
+
+184. CALLOUS DAOBOYS
+Sold to the band for a previously gifted Cement Coin.
+
+185. SOUL GLO
+
+186. DANI, QUEEN OF THE SUNFLOWERS
+
+187. ASHLEY OF LAVENDER
+
+188. THE DEVIL (SARITA?)
+
+189. IN THE CARE OF THE SKY
+
+190. ETHAN OF THE DEVIL
+
+191. SKYLAR OF THE LESBIAN BAR
+
+192. ASTARIS LUX CAELI
+10
+--- PAGE 11 ---
+193. TAU CETI
+
+194. THE ETHEREAL BABE
+
+195. GOAT SHIT AT CAPITAL OF TEXAS
+
+196. EYA OF CHICANERY
+
+197. RUBIN OF NOTHING
+
+198. LEXIS OF PUGS
+
+199. YARROW & SAGE
+
+200. ΜΟΝΚEY WRENCH
+
+201. CAT OF VANILLA
+
+202. TIGRESS PUB
+
+203. EPOCH COFFEE
+
+204. RESIDENCE MARRIOT
+
+205. ANNA OF CREATION
+
+206. IN THE CARE OF KELLY OF 160
+
+207. MAASER SUSHI
+
+208. JAMES OF DUSK MANTLE
+
+209. HIDDEN CASTLE IN THE REEDS (LUCK)
+
+210. HIDDEN CASTLE IN THE REEDS (STUCK)
+
+211. DICK OF ALBUM ART
+
+212. DOUG OF DARK WATER
+
+213. THE TRAVELLER
+
+214. HOLM OF $:-][^{6}~^{,}$ 
+
+215. THE BIG KING
+
+216. MADDIE OF DARTS
+
+217. BAR THE DESTROYER
+
+218. MAX OF ART
+
+219. A FOOL
+11
+--- PAGE 12 ---
+220. THEO OF SHIT
+
+221. MARC OF EQUALITY
+
+222. IN THE CARE OF DANCING TONY
+
+223. MELISSA OF KEROSENE
+
+224. MARIAH OF WATER
+
+225. ΙΝΤΟ ΤHE VOID
+
+226. MISS PIGGY
+
+227. RJ OF THE SPIRIT OF CONEY ISLAND
+
+228. EARTH TEMPLE
+
+229. FREDIE OF SPACE
+
+230. ELLORY OF DIABETES
+
+231. JOHN OF DEGENERATION
+
+232. FUSSY FRIENDS
+
+233. ANDRIAN OF JERSEY
+
+234. MATT OF GOOD NATURE
+
+235. KEN OF OCD
+
+236. MICHAEL OF MUSIC
+
+237. RUINS DALLAS
+
+238. HAMPTON INN ADVENTURE TEAM
+
+239. DANIELLE OF ATHLETICA
+
+240. KEVIN OF SOCIAL JUSTICE
+
+241. CRYSTAL SHRINE GROTTO
+
+242. QUEERTINI TIME
+
+243. IAN OF THE LIE THAT TELLS THE TRUTH
+
+244. CEDAR THE WITCH
+
+245. TATIANNA, QUEEN OF THE FAIRIES
+
+246. STARGOYLE
+12
+--- PAGE 13 ---
+247. CAYCE OF GLITTER
+
+248. MICHAEL OF RAINBOWS
+
+249. HALE OF LAUGHTER
+
+250. CHRISTO
+
+251. LUKE OF DESTRUCTION
+
+252. RJ, MAN OF ZA
+
+253. MAX OF LOVE
+
+254. JAMES OF DUAL MULE
+
+255. JUNEBUG OF RENO'S
+
+256. TROY OF THRILLS
+
+257. WOUNDED OSTRICH
+
+258. SIREN OF TEETH
+
+259. SUE OF HOOTERS
+
+260. STEVE OF RENO'S
+
+261. MEGAN OF CHAOS
+
+262. PLINY FISK III
+
+263. KYLE OF LEFT SQUARED
+
+264. TIM OF LOST BALLPOINT PEN CAPS AND PUTRESCENT GREEN RAB-
+BITS
+
+265. SPRINGHILL SUITES
+
+266. GLENN OF THE SUNRISE
+
+267. TAYLOR TX
+
+268. DARCY OF RUINS
+
+269. CARLY & JOHN
+
+270. IN THE CARE OF CONNOR
+
+271. IN THE CARE OF NIKO WAX
+
+272. KNOCKDOWN BATHROOM
+13
+--- PAGE 14 ---
+273. CAROILYN OF ?Disitherm?
+
+274. LAVENDER OF B-DAY
+
+275. MATMOS
+
+276. JOSH OF CISUM
+
+277. CHARLIE BURNHAM
+
+278. DAVID TORN
+
+279. MEREDITH OF OPENNES & NON-JUDGMENT
+
+280. FLUKE MOGUL
+
+281. MATTEO OF MOLTO OHM
+
+282. ΚΑ ΒAIRD
+
+283. JENNIFER OF UNICORNS
+
+284. CLAIRE OF THE MOON
+
+285 286. ΚAY & KATHLEEN
+The plights were accidently fused together. They have since broken up.
+
+287. JACK OF "JACK"
+
+288. JEFF W.
+
+289. SANGITA OF TEETH
+
+290. ALAN OF THE EARTH
+
+291. MILAN OF KUNDERA
+
+292. IN THE CARE OF OLIVIA (JT GREEN)
+
+293. GIGI CHEN
+
+294. ALEXIS KANDRA
+
+295. GRADA KILOMBA
+
+296. TREVOR PAGLEN
+
+297. CLERK #3 OF MCNALLY JACKSON
+
+298. TRAILER PARK LOUNGE
+
+299. GREG OF ZONE 5
+14
+--- PAGE 15 ---
+300. ELVIS OF HOTDOG CITY
+
+301. TARA OF DAEMONS
+
+302. MICHELE OF AVEC UN L
+
+303. RICHARD OF SHADOWS
+
+304. HALCYON
+
+305. AJA OF FROGLAND
+
+306. JEN, MASTER OF GECKOS
+
+307. JOHN OF ELYSIUM
+
+308. LUCAS OF GRYZELDE
+
+309. ΕΝΟ & MIMI
+
+310. XY OF COMPASSION
+
+311. STEFAN OF THE PLAINS
+
+312. MOLOCH
+
+313. SADIE OF ELYSIUM
+
+314. CMPBS
+
+315. AVON, KEEPER OF WALNUTS
+
+316. SIGMOND, WARRIOR OF KINDNESS THROUGH ART
+
+317. MEEK OF MONAD
+
+318. TIGRESS REDUX
+
+319. OAKDA MALKUTH
+
+320. LOST MAGIC FOUND
+
+321. ELLIOT OF AUTISTIC EXPRESSION
+
+322. ED OF XTRIMINERICH
+
+323. JOSEPH OF KINDESS
+
+324. SHANIA OF LIGHT
+
+325. ELENA OF WHO?!
+
+326. TYLER OF QUEEN CRUST
+15
+--- PAGE 16 ---
+327. DIEMOS
+
+328. ISAIAH OF FIDELITY
+
+329. CHILO'S
+
+330. TAY
+
+331. ONE STAR
+
+332. SUPER POWER
+
+333. LIZ OF LIVING
+
+334. ELI OF DOLPHIN
+
+335. CROWN INN
+
+336. MANNET OF $28
+
+337-
+KAYLEE OF CLOTHES
+
+338. STORM OF COOLNESS
+
+339. THE OTHER WORLD
+
+340. NOVARE RES
+
+341. LILY OF EQUITY
+
+342. RICHARD OF HOUSING
+
+343. MARK OF FOISTING
+
+344. HOLDEN OF LOVE
+
+345. MAINE CANNABIS EXCHANGE
+Set with vinyled cement.
+
+346. PETSHOP
+Set with vinyled cement.
+
+347. PETER OF LIFE MUSIC
+348 SAM OF WAGES
+
+349. WEEDMAN OF WASHINGTON PARK
+
+350. DON OF NEW ART CITY
+
+351. VIOLA OF CREATIVE TECHNOLOGY
+16
+--- PAGE 17 ---
+352. YO-YO OF CHAOS
+Veeler points to a lone form amongst the minnows, cloud headed and
+ with a kind face. I plight them and recieve their title before a hasty
+ return to the magical miasma I had been at brew before. So burdened,
+ the storm kept the cube in their right hand for the entire show. I left
+ the building as the pigs filed in.
+As the clock struck 1h26 on 25 Merde 150, mere hours after the plight-
+ ing, I recieved an email from Hex House, subject line "Advice accepted."
+ The body of the email held a 2.2 MB IMG 9564.jpeg file revealing an
+ unknown character at hammer to chisel upon what must be assumed to
+ be no. 352.
+Cybersewing bring to me another sight of the plight, as @charstiles
+ emits a video of @yoyo.munk taking the chisel to cement, followed by
+ @blackchainbody holding the un-fortunate plight alight. Burn on.
+
+353. THE MAGICIAN
+
+354. NATASHA OF AUTHENCITY & COMMUNITY
+
+355. RENO OF A BUBBLE
+
+356. TAYLOR OF ALIGNING YOUR OWN PATH
+
+357. AMELIA OF SILLINESS
+
+358. PERSEPHONE OF MERCY
+
+359. MIRANDA OF THE WORLD
+
+360. 262 BARROW ST. APT 2
+
+361. KRUSHANG OF BIO
+
+362. DEVIN, THE HERO
+
+363. ALEXEY OF FAILURE
+
+364. TOOTLYPUM
+
+365. BEN OF INDECISION
+
+366. ABSTRACT CLIT
+
+367. RUBY OF MINIMUM WAYNE
+
+368. SERENE OF LOIN
+
+369. TEE OF ANTI-CAPITALISM
+
+370. LAURA OF THE FLOWERS
+17
+--- PAGE 18 ---
+371. JACKIE OF JUST HANGING OUT
+
+372. CODY OF CHISELING
+Originally plighted to Char of no. 64, but replighted along.
+
+373. IN THE CARE OF AMIR
+
+374. BUSHWICK COUNTRY CLUB
+
+375. JARI JONES
+
+376. THE LIBRARY
+
+377. PACE OF EARTH
+
+378. SYD OF ASYMMETRY
+
+379. BARRY OF PEACE AND LOVE
+
+380. NAYRIM OF THE WORLD
+
+381. BRUNO OF LIVING
+
+382. CARO OF KNOWLEDGE
+
+383. MATT OF FERRUM FERRO EXACITUR
+The first of the white numbering.
+
+384. JOE OF THE WAY WAY
+
+385. CHRISTINA OF CONFIDENCE
+
+386. PRUZI OF LOVE
+
+387. ATTILO OF CUSHING
+
+388. WYL OF ACTION
+
+389. MAX SYNDER
+
+390. GRANT OF HEAT
+
+391. JAIME OF FAMILY
+
+392. NETOPSKIS OF LOVE
+
+393. LEIGH OF SINCERITY
+
+394. LYDIA OF CROCS
+
+395. ANGELIC OF PERU
+
+396. GRACE OF MARXISM
+18
+--- PAGE 19 ---
+397. ALMA OF ALL SPACES ARE PUBLIC SPACES
+
+398. GROVE NEWS CORNER
+
+399. SAM OF HUMAN CONNECTION
+
+400. BILL & SEPHRAH
+
+401. KRYSTYN OF NOMAD
+
+402. HOLLY OF SNSUAL GRIEF
+
+403. AUSTIN OF THE NORTH WOODS
+
+404. BRIAN OF INSIGHTS
+
+405. LESLEY OF SPARKY THE DOG AND THEN YOU KNOW WFMU'S ROCK
+N' ROLL SOUL RADIO SEATNERD
+
+406. COUCH SLUT
+
+407. ST. VITUS
+
+408. MEG OF NOBODY SUFFERING & SMOKING WEED
+
+409. JAN OF CURIOSITY
+
+410. ROBERT OF SITTING
+
+411. BRIAN OF TRUTH
+
+412. LAURIE OF A CRIPPLING FEAR OF DEATH
+
+413. JOHN OF RAGTIME
+
+414. DONOVAN OF AUTHENTICITY
+
+415. DAVE OF DAVE'S
+
+416. EMILY OF TALKING TOO FAST
+
+417. IN THE CARE OF STEVE
+He gave it to one of his boys.
+
+418. GYPSY OF ARCHIEL VILLAGE
+
+419. NOT HERE
+
+420. NOT HERE
+
+421. NOT HERE
+
+422. GLORIEL OF ART HISTORY
+19
+--- PAGE 20 ---
+423. JAMIE OF EVERYONE DESERVES A SHOT
+
+424. CHRISTINA OF ROCK
+
+425. EVAN OF ANIMALS
+
+426. RUSTARD OF MUSTARD
+
+427. LON OF GOOD
+
+428. ED OF DUNCAN
+
+429. JACOB OF MAXIMAL RADIANCE
+
+430. NICOLL OF OVERTHINKING
+
+431. JIMOTHIAN OF THE VOID
+
+432. JAKE OF NAN
+
+433. ΒΟΝΟΒO OF HOUSE OF NOT OF THIS TIME
+
+434. HERMINA OF ILLEGAL RABBIT BREEDING
+
+435. AVDOL OF LOGIC & REASON
+
+436. KADE OF PUPPETRY
+
+437. JESSE OF TOOLS
+
+438. ROB OF LIKES TO SMASH HOT METAL
+
+439. DRUID OF NATURE
+
+440. TOKI WARTOOTH OF SHARING
+
+441. DJ EPZ
+
+442. ILYA OF TINKER
+
+443. NICK OF HEAVY FUCKING METAL
+
+444. BIG BLOOD
+
+445. JAMES OF BAGPIPERS
+
+446. LEV OF HONER
+
+447. MJOP
+
+448. DANNY OF WORK
+
+449. JOJOKITTYLUVAH92
+20
+--- PAGE 21 ---
+450. AIDEN OF POOPING
+
+451. SNAKE UNION
+
+452. BEN OF BADA BING
+
+453. MOTTE
+
+454. CHRIS OF HUMAN RESOURCE MANAGEMENT
+
+455. HANNAH OF SCHLEPPING
+
+456. SRAH OF MELISSA
+
+457. LILY OF LOVE
+
+458. FREE ON STOOP
+
+459. MARK OF ANIMALS
+
+460. TIFFANY OF LEGEND
+
+461. MICHAEL OF I DEFEAT THE DEVIL
+
+462. WALGREENS WOMAN
+
+463. JOHN OF DANCETERIA
+
+464. DARSHAN OF INDIA
+
+465. NEW HOME
+
+466. TRAVIS OF AIRPLANES
+
+467. SEAN OF ANGEL
+
+468. RAFAEL THE FRIGHTENED CHICKEN
+
+469. CHRIS OF MICHAELS
+
+470. CLARA OF HOUSE OF EGG
+
+471. LARRY OF NIGHT SHIFT
+
+472. SOHA OF SIMULATION VORTEX
+
+473. DARBY OF
+Entry partially censored for posterity.
+
+474. TREVOR OF THE FREE SPIRIT
+
+475. VERONICA OF CONTINUES
+21
+--- PAGE 22 ---
+476. DAVE OF BASS PLAYING
+
+477. COLIN OF MUSIC
+
+478. VON OF THE RIFT
+
+479. ENDSWELL
+
+480. WILL OF SEED OF MOOSE
+
+481. ANNA OF SPIRITED AUTONOMY
+
+482. OMAR OF RASTAFARI
+
+483. ANDREW OF CREATIVE JUICE
+
+484. GEORGE OF 54
+
+485. MARINA OF NOSTALGIA
+
+486. KATYA OF GOOD MOVES
+
+487. TRISHA OF COMMUNITY
+
+488. ERIC ANDRE
+The plighted took the burden but, in the pursuit of tail, forgot the cube
+ at the bar. It may still live at Horses & Divorces.
+
+489. THADDEUS OF HE
+
+490. FREDDY'S (IN THE CARE OF DAVE)
+
+491. TABAH OF WITHHELD PERMISSIONS
+
+492. CASSIE OF A GOOD TIME
+
+493. ROMER OF EL GATO TRABAJAN
+
+494. EDUARDO OF GRANDPA
+
+495. DABS OF TURTLES ALL THE WAY DOWN
+Numbered 496 to hide the power of the perfect.
+
+496. AL-A, FIRST OF THE GOLEM
+Numbered 495 to hide the power of the perfect.
+
+497. MCDERMOTT OF LADDER 25
+
+498. JASON OF CHRIST
+
+499. SAMANTHA OF MATERIAL CREATIVITY
+22
+--- PAGE 23 ---
+500. KATE OF CURIOSITY
+First entry written with pencil glasses.
+
+501. EDWIN OF INSTIGATION
+
+502. BRIANNA OF FASHONISTA
+
+503. CILLA OF HUMANITY
+
+504. LAST PLACE TRIVIA
+
+505. USHA OF WAP
+
+506. KENNEDY OF COMMUNITY, DISCOVERY, & PLAY
+
+507. MARIO FROM THE BARIO
+
+508. FINN OF LIBERATION
+
+509. NOUR OF NOIR
+
+510. ROX OF ?Rabbit Romance?
+
+511. ALESSANDRA OF ACCEPTANCE
+Numbered 512 to hide the power of twos.
+
+512. SARAH OF DJ DAVE
+Numbered 511 to hide the power of twos.
+
+513. NORA OF DANCE MUSIC EUPHORIA
+Written in pen.
+
+514. NORA OF YEARNING
+
+515. CHRIS OF THE MOMENT
+
+516. ANDY THE STEADFAST
+
+517. MITRA OF FIRST COME, FIRST SERVE
+
+518. ARIEL OF GREZNY
+
+519. ALEXANDER OF ABSOLUTE SPIRITUAL POWER
+Plighted on the occasion of the 10th birthday of L.O.T.Ι.Ο.Ν.
+
+520. KEM OF DESTROY EVERYTHING
+
+521. DENNIS OF THE MIND
+
+522. FRANK OF FATHER
+
+523. BEN OF GOLF
+23
+--- PAGE 24 ---
+524. SYD OF ABORTION
+
+525. WAYNE OF JUDAH
+
+526. SHEA OF FAIRY CIRCLES
+
+527. ?Heloira? OF COMPASSION
+
+528. KITTY OF KATS
+
+529. REASON
+
+530. JAIME OF SUGAR
+
+531. ANGEL OF ANARCHISM
+
+532. AL-B, SECOND OF THE GOLEM
+Plight is fireless.
+
+533. MICHELLE OF RAGE
+
+534. DELI OF DIATOMS
+
+535. ELYA OF HAPPY NEW YEAR
+
+536. ALAS OF BICS
+
+537. ELRIC OF JUXTAPOSITION
+
+538. EMILY OF A REGULAR GUY
+
+539. RYAN OF FRIENDSHIP
+
+540. BAR 718
+
+541. COLIN OF ACTIVE KINDNESS
+
+542. MAMA TRIED (IN THE CARE OF WILL)
+
+543. JOE OF ALL THE TIME METAL
+
+544. SACHAE OF LOVE
+
+545. ABE OF DOUCHING
+
+546. THOMAS OF JACK SHIT
+
+547. PIERCE OF MY PARENTS
+
+548. ANN OF HOVING
+
+549. XENA OF COLLECTIVISM
+24
+--- PAGE 25 ---
+550. MAGGIE OF HUMOR
+
+551. DENIS OF THE FUCK ?Pioreccs?
+
+552. MAYA OF SCRAPPY
+
+553. JACKIE OF UNCONDITIONAL LOVE
+
+554. ELIJAH OF HAPPINESS
+
+555. AWAITING
+
+556. CONOR OF THE LAW
+
+557. ANDREW OF MISCHIEVOUS SWEETHEART
+
+558. COTTER OF NOTHING
+
+559. AVI OF ABSOLUTE FREEDOM
+
+560. EYN OF SENTIENCE
+
+561. ANDREA OF BEING A PILLAR FOR YOURSELF
+
+562. MAARI OF BELIEF & LOVE
+
+563. MOON OF SILLINESS
+
+564. REUBEN OF DESIGN
+
+565. DOUG OF PRECISION
+
+566. LUCKY 13 SALOON
+
+567. MEI JIN OF LOYALTY
+
+568. MIKE OF HARMONIES
+
+569. TITO OF BLACK METAL
+
+570. KAT OF KOMPASSION
+
+571. CHRIS OF FAIRNESS
+
+572. AZEZAL OF LIMITLESS CONCERNS
+
+573. MICHAELE OF COINS
+The Ledger inexplicably skips from 572 to 574. A week later, I recieved
+ 573 from across the bar at Lucky 13s, noting the omission for the first
+ time. In order to dispel the obvious cursed nature of this "rogue" plight,
+ it was plighted to the agent of Janus at Butterfly.
+
+574. GABE OF PRIOR FIRE
+25
+--- PAGE 26 ---
+575. DUANE OF DEEP DIVES
+
+576. DEVON OF COLD LEFTOVERS FOR BREAKFAST
+
+577. GREG OF NIGHTFALL OF DIAMONDS
+
+578. GRACE OF GOOD TIMES
+
+579. SHARISE OF PEACE
+
+580. KAROLINA, MASTER OF DISASTER
+
+581. MATT OF CHEESEBURGER
+
+582. WILLY OF CHILLING
+
+583. CHARLES OF DEVELOPMENTS
+
+584. GRACE OF SHIT STIRRING
+
+585. JENNY
+
+586. JEREMY OF LAUGHTER
+
+587. LEAH OF CANDY
+
+588. YURI THE CREATOR
+
+589. ANGELA OF CATS
+
+590. WILLIAM OF GREAT TIMES
+
+591. IAN OF CHAOTIC CATHARSIS
+
+592. NICK OF THE WORLD
+
+593. MATHILDE OF REBIRTH
+
+594. ANDREJS OF DIRECTED DIMENSION
+
+595. DAVID OF A CAT
+
+596. GREY OF LOVE
+
+597. DELIAH OF HARLEM
+
+598. KIMBRA OF LOVE
+
+599. KAORU OF MYSELF
+
+600. VARUN OF CRUELTY
+
+601. JEREMY OF THE BEAT
+26
+--- PAGE 27 ---
+602. DARIAM OF SPIRALS
+
+603. MAURO OF DORABA
+
+604. ZOH OF SUNSHINE
+Replighted to Sophia Brous of EXO-TECH.
+
+605. JAMES OF KAIZEN
+
+606. JESUS OF CHRIST
+
+607. SHALIN OF RECENTLY POSSIBLE
+
+608. ΜΙΚE OF EXPRESSION
+
+609. SEAM OF NOISE
+
+610. JUSTIN OF STAY LIGHT
+
+611. HILTON OF THE SUNSET OF THE SOUL
+
+612. CHRIS OF JAZZ
+
+613. REBECCA OF REPRODUCTIVE JUSTICE
+
+614. ALIZEÉ THE GODDESS
+
+615. JOSHUA OF AUTONOMY
+
+616. PHILLIP, BRINGER OF PEACE
+
+617. JAMES OF OLD LADRES
+
+618. JITWAM OF CHANGE
+
+619. BLAKE OF COMMUNISM
+
+620. JENNIFER OF JUSTICE & PEACE
+
+621. KAYE OF OPTIMIST NIHILISM
+
+622. FRAN OF HUMANITY
+
+623. ARIELLA OF BOLD AS LOVE
+
+624. AMANDA OF MYSELF
+
+625. ASHTON OF SOUND LOGIC
+
+626. ALEX OF SUSTAINIBILITY
+
+627. CONNOR OF THE SOUL
+27
+--- PAGE 28 ---
+628. AMELIA OF HONESTY
+
+629. TERRELL OF TITTIES
+
+630. DRE OF THE BLACK FLAME
+
+631. SYDER OF THE FUTURE
+
+632. MEG OF IDK
+Written in ink.
+
+633. MILLER OF OPEN MINDEDNESS
+
+634. VERONICA OF BEING KIND TO EVERYONE
+
+635. RAQUEL OF DYING
+On account of the chaos, no. 635-638 played a dance and may be in
+ alternatively listed hands.
+
+636. KATYA OF ?Shredding?
+See above.
+
+637. ROSS OF CONSTANT LEARNING
+See above above.
+
+638. TIFF OF REVELRIE
+See above above above.
+
+639. MIKE OF THE BROILING NOTION
+
+640. JACKSON OF EQUAL FREENESS
+
+641. OLIVIA OF ADTECH
+
+642. ALEX OF THE MARSH
+
+643. DAN OF BEING AWESOME AND MILDLY SMART
+
+644. BELL WITCH
+
+645. CAMERON OF SONDERS
+
+646. NATALIE OF PURPLE HAZE
+
+647. JOSEPH OF HAPPINESS
+
+648. MILES OF FRIED CHICKEN
+
+649. ELISE OF la force tranquille
+Written in her own hand.
+
+650. JOE OF QUALITY
+28
+--- PAGE 29 ---
+651 FELICIA OF FAMILY AND FAMILY
+
+652 ALEX OF MAKING THINGS BETTER
+
+653. MITCHA OF PLAY
+
+654. BEN OF JEST
+
+655. MONA OF A NEW AGE
+
+656. KIERAN OF THE GATEWAY TO HELL
+
+657. ANDY OF THE GREATEST PARTIES ON EARTH
+658 CHRISTIANO OF NOTHING
+
+659. SERO OF SPIRAL
+Plights 660-669, set on All Hallow's Eve, each bind a Demon of Modernity.
+
+660. Ingrid of Forlorned Love
+
+661. AWAITING of Fascist Time
+
+662. AWAITING of Marring of the Heavens
+
+663. AWAITING of Environmental Rage
+
+664. Rich of Dissassociation
+
+665. Avi of Addiction
+
+666. AWAITING of Consumptive Waste
+
+667. Elizabeth of Celebrity
+
+668. AWAITING of Speculative Value
+
+669. BOND of Nihilism
+It may still be there....
+
+670. COSTUME CONTEST
+
+671. DAVID OF ATTEMPTED WELL BEING
+
+672. NICK OF GOOD COFFEE
+
+673. DIIV
+
+674. JACK OF HIGH
+
+675. DAN OF STRAIGHT EDGE
+29
+--- PAGE 30 ---
+676 DANIAL OF HARMONY & PEACE
+
+677. KEKO OF MERGE
+678 MATT OF PSYCHOSIS
+
+679. IVY OF DESTRUCTION OF SYSTEMATIC LIFE
+
+680. JAMAICA OF TECHNO
+
+681. FERGUS OF CEREMONY
+
+682. RACHEL OF KINDESS
+
+683. ELMAR OF MIXING
+
+684. ZOE OF SHRED
+
+685. MIGUEL OF CHABES
+
+686. REIKO OF GRATITUDE
+
+687. LUCY OF THE NIGHT SKY
+
+688. CLINTON OF THE HOUSE OF AMBIENCE
+
+689. M OF LOVE
+
+690. EDWARD ON MY TWO FEET
+
+691. ALESSANDRA OF HER DAUGHTER
+
+692. DAMON OF RABBIT HOLE
+
+693. GENE OF FIXING PROBLEMS
+
+694. SHANI OF HOPE FOR HUMAN BEINGS
+
+695. KELLY OF JUST ME
+
+696. TAY OF SOUNDS & SONICS
+
+697. ANNA OF EDEN
+
+698. DAHLIA OF SPECIFICITY
+
+699. MIL OF NOT THINKING ABOUT IT
+
+700. AWAITING
+
+701. RANDIE OF THE MAN WITH THE CURLY HAIR
+
+702. DRAMA DRIVE'S BROTHER
+30
+--- PAGE 31 ---
+703. JOSHUA OF MY LEGS
+
+704. CHRISTINA, THE DESTROYER OF WORLDS
+
+705. OMAR OF FREE PALESTINE
+
+706. DRAMA DRIVE
+
+707. STEPHEN OF HEART
+
+708. KAT OF LEOPARD
+
+709. HERNAN OF LACKSIDASICAL ART
+
+710. ZHENYA OF THE POSSIBILITY OF THE IMPOSSIBLE
+
+711. EUGENE, THE ARTIST FORMERLY KNOWN FOR PRINTS
+
+712. THE GATE (IN THE CARE OF KELLY)
+
+713. MARK OF WAR
+
+714. SEB OF SOCCER
+
+715. CHRIS, DANCE CHASER
+
+716. CAMILA OF FREEDOM
+
+717. BERNI OF THE PEOPLE'S JERKY
+
+718. ELLA OF ENTROPY
+
+719. MAGGIE OF TRUTH
+
+720. AMAR OF JACOB
+Plighted at 2H32AM on a whim on a walk between Thanksgiving dinner
+ and High Dive to a group of strangers. Amar was the first drawn to the
+ light and spoke his true name.
+
+721. TOM OF CREATIVE SATISFACTION
+
+722. KILLIAN OF BAKING
+
+723. TROY OF THAT GOOD GREEN GANJA
+
+724. ALLY OF GARDENIA
+Originally in the care of Char of 64 
+
+725. MEGAN OF DELAYED SPONTANEITY
+
+726. JJ, AGENT OF CHANGE
+
+727. SAMANTHA OF THORNS
+31
+--- PAGE 32 ---
+728. CHRISTOPHER OF GLOBAL FREQUENCY
+
+729. MATSU OF FOOD
+
+730. CHRISTINA OF SUPERFINE
+
+731. ELLISON OF BEAUTY & CYBORGS
+
+732. DAH, REFORMED ARTIST
+
+733. SYDNEY OF BLUNTNESS
+
+734. CLEO OF CLIMATE JUSTICE
+
+735. JANUS OF MANSIONS
+
+736. LOVEBIRDS (IN THE CARE OF LOLO)
+
+737. ANNA OF LISTENING
+
+738. ALEC OF VIRTUES
+
+739. TANNER OF BEING YOURSELF
+
+740. PALACE (IN THE CARE OF NICHOLAS)
+
+741. JK THE PRACTIVISTA
+
+742. ROMNALDAS OF FUCKED OFF SHADOWS
+
+743. SCOTT OF ALL KINDS OF ART
+
+744. NOAH OF HONESTY
+
+745. EMMA OF THOUGHTFULLNESS
+
+746. LEAH, SAINT OF PATRONS
+
+747. JASON OF SOUND
+
+748. WILL OF CALM
+
+749. DANIEL OF THE LIONS DEN
+
+750. LUNA OF THE RIGHT TO PARTY
+
+751. JASPER OF GOOD FUCKING DANCE FLOORS
+
+752. MITCHYLL OF EXPRESSION
+
+753. LISA OF INTERSECTIONAL FEMINISM
+
+754. KENZIE, MARATHONER
+32
+--- PAGE 33 ---
+755. PIXIE OF EVERYTHING I BELIEVE IN
+
+756. STELLA OF DARTS
+
+757. ASHLEY OF LATE NIGHT
+
+758. MICHAEL OF SCALE
+
+759. WILL OF UNFOUND DEPTHS
+
+760. BRITTANY OF HEMLOCK
+
+761. JESS OF HAVING FUN
+
+762. SAM OF SOLIDARITY
+
+763. DAN OF FILM MAKING
+
+764. ALY OF THE LIGHT
+
+765. IAN OF INDIVIDUALITY
+765. JORDAN OF DEATH
+
+766. JADE THE JUST
+
+767. MATT OF CURIOSITY
+
+768. KYLE OF KNOWLEDGE
+
+769. TIMOTHY OF SAKE POWER
+
+770. HEIDI OF COMRADERIE
+
+771. SARAH OF ANNOYING QUESTIONS
+
+772. JAIME OF FAMILY
+
+773. JOHN + LINDA OF THE FUTURE
+
+774. HEADWATERS
+
+775. SHANNON OF KINDNESS
+
+776. HALLIE OF THE DIGNITY OF HARD WORK
+
+777. BRIAN OF IRON & BLOOD
+
+778. NATE OF THE DIGITAL ALPHINE
+
+779. ISABELLA OF MATHEMATICS
+
+780. VANESSA OF GENO'S
+33
+--- PAGE 34 ---
+781. JORDAN OF HORSE CULTS
+
+782. DEAD
+
+783. STEPH OF EQUANIMITY
+
+784. Ε.Ρ.Μ.
+
+785. ALEX OF REAL TRUTH
+
+786. SIDNEY OF AGENCY
+
+787. DAVID OF HARD TRUTHS
+
+788. KAT OF THE OM IN THE AIR
+
+789. SAM, THE SEWER RAT MEME HISTORIAN
+
+790. MYF OF THE NETHERWORLD
+
+791. RONDELL OF QUEENS
+
+792. ALLISON OF REST
+
+793. KYRON THE ARTITECT
+
+794. MEG OF SMALL SOCIAL KINDNESSESS
+
+795. HOLLIS OF THE SUPER POWERS
+
+796. CARLEIGH OF WATERFORD
+
+797. ALEXANDER OF THE COAST
+
+798. APOLLONI OF PROSPERITY
+
+799. DIRTY MAN 222
+
+800. BREE OF PEACE
+
+801. ΚΑΙ OF BAR TENDERNESS
+
+802. ANDRE OF QUALITY
+
+803. ANAIS OF PLAYLISTS
+
+804. AJ OF APPLE JUICE
+
+805. CHARLES OF JELLYNESS
+
+806. SAM OF MAJOR KINDNESS
+
+807. DREW OF COMFORT
+34
+--- PAGE 35 ---
+808. THE WERHEIMS OF RANK CHOICE VOTING AND ABORTION
+
+809. ALPHA OF WEED
+
+810. GIGI OF BUBBLING KINDNESS
+
+811. MATT OF HONESTY
+
+812. BOBBY OF DAIQUIRIS
+
+813. JULIANNA OF HOPE
+
+814. FRANCESCA OF CONCRETE
+
+815. JEFF OF DISMANTLING THE AMERICAN EMPIRE
+
+816. ANNALIISA THE ADVOCATE
+
+817. AGATHA OF PEACE ON EARTH
+
+818. ALISSA OF NOWADAYS
+
+819. ZACH OF BEING HOT
+
+820. GLEN OF THE SOUND
+
+821. KAT OF NATURE
+
+822. BRIAN OF BK HUSBAND
+
+823. MIRANDA OF BLUE COMPASSION
+
+824. SQUARE DESIGN
+
+825. HENRY OF SOUL SEARCHING
+
+826. ΝΑΤΕ OF DEFLECTION
+
+827. DANIAL THE FISHERMAN
+
+828. TERRENCE OF THE FUTURE INTERIOR
+
+829. YONI OF US
+
+830. WILLIAM THE LUSH
+
+831. SHERRI OF FUN
+
+832. LILITH OF THE WERIDOS
+
+833. DANNAH OF GOOD FOOD AND WONDERFUL VIBES
+
+834. CHARLIE OF THE INSTANT MOMENT
+35
+--- PAGE 36 ---
+835. ALIYA OF THE SEA
+
+836. AMELIA OF INTUITION
+
+837. JAIME OF MYSELF
+
+838. ERIN, THE CUNTRESS
+
+839. KIWI OF CHALLENGING BEAUTY
+
+840. RAQUEL OF GOTH JAP QUEEN
+841. JAY OF ATARAXIA
+
+842. LUCY OF JACK SHIT
+
+843. ZACK THE DRAWER
+844. CANDICE, I'M OUT BITCH
+
+845. MIKE OF SOCIAL JUSTICE
+
+846. KATHY OF COMPASSION
+
+847. NICK OF FRIENDSHIP
+
+848. IN THE CARE OF L.O.Τ.Ι.Ο.Ν.
+
+849. DAVID THE SWORDSMAN
+
+850. NEIGHBORS BLAZE & MICHAEL
+
+851. CHRIS OF OPTIMISTIC NIHILISM
+852. AJAX OF INEGRITY
+
+853. CALLI OF ENVIRONMENTALISM
+
+854. ALEX THE UPLIFTER
+
+855. EMILY THE ARTIST
+
+856. EMILY OF THE FAE
+
+857. MOSS OF LEATHER
+858. DELANY OF INTERDEPENDENCE
+
+859. SYDNEY OF UNDERSTANDING
+
+860. TV EYE (IN THE CARE OF DIEGO)
+
+861. GREG OF NOT MUCH
+36
+--- PAGE 37 ---
+862. JANNIK OF LAUGHTER
+
+863. IN THE CARE OF TEDDY
+
+864. MARIANO OF SMALL EVERYDAY STRUGGLES
+
+865. EMMANUELLA OF A FREE PALESTINE
+
+866. MAYA OF DISABILITY JUSTICE
+
+867. INTI OF A FREE PALESTINE
+
+868. SAM OF ANARCHIC JUSTICE
+
+869. ANZ OF BALANCE
+
+870. HILLARY OF SERVING OTHERS
+
+871. ELIJAH OF LIBERATION
+
+872. NATE OF HEDONISM
+
+873. SEPEHR OF KHAVAAR
+
+874. GRANT OF PURSUING
+
+875. SATURN OF BRIDGES
+
+876. TSEDEY OF DECENCY
+877· BEIGE
+
+878. JORDAN OF EXPRESSION
+
+879. RICHARD OF THE PRESENSE
+
+880. DANICA OF AUTHENCITY AND COMMUNITY
+
+881. JENN OF THE LOVING TAMALE
+
+882. MOOD RING
+
+883. THE Kos
+
+884. KATIE OF COMMUNITY
+
+885. GREGORY HORNDESKI
+
+886. ERIC OF GEOGRAPHY
+
+887. LEON THE LION
+
+888. THE LIGHTHOUSE
+37
+--- PAGE 38 ---
+889. RITA OF JUSTICE & PEACE
+
+890. DJ VOICES
+
+891. ELLE OF ANXIOUS LOYALTY
+
+892. AMELIA OF MYSTERIOUS LOVE
+
+893. NASHWAN OF LONG LIVED SOCIAL ANXIETY
+
+894. 88TH & EAST RIVER
+
+895. VERONICA OF HEARTVILLE
+
+896. CHELSEA OF COASTAL AWE
+
+897. 88TH & HUDSON RIVER
+
+898. LEO OF THE FREE SPIRIT
+
+899. GUSTAVO OF DESIGN
+
+900. KYLE OF HOPE
+
+901. PATRICK THE GNOMAD
+
+902. SAM OF BARTERING
+
+903. CECI OF THE FUNKY LAMB
+
+904. ELI OF CORE HEDONISM
+
+905. ASHLEY OF DELIGHT
+
+906. TEDDY OF NOTHING AND FALLING FOR EVERYTHING
+
+907. AYANA OF THE QUEERS
+
+908. NORA ILLUMINATION
+
+909. MIA OF WALKING
+
+910. FRANCESCAE OF HELP!
+
+911. ELIAS OF UNKNOWN UNKNOWNS
+
+912. MOISHE OF ETERNAL LOVE
+
+913. ANDRAS OF SCIENCE
+
+914. DANI THE SEA URCHIN
+
+915. SHARIF OF FREE ASSOCIATION
+38
+--- PAGE 39 ---
+916. JACOB OF UNCERTAINTY
+
+917. CHRIS OF HUGS
+
+918. CHRIS OF INNOVATION
+
+919. JOE OF LYFT
+
+920. LINDSEY OF CATS
+
+921. ANDRE OF THE DYING
+
+922. VINO VERITAS
+
+923. LINI OF METAL
+
+924. FEHÉRLÓ THE WILDFLOWER
+
+925. KENDYLL OF THE (NOT SO) BENIGN ABSURDITY OF LIFE
+
+926. ΝΙΑΜΗ
+
+927. RANCYD OF HOTDOGS
+
+928. BLACKFOOT THE STRAY
+
+929. BEAR OF THE METAL GODS
+
+930. VINN, CHANGLING WARLORD
+
+931. MISTRESS OF CAUTION
+
+932. IN THE CARE OF CHAOS
+
+933. SAL OF "ANYTHING"
+
+934. JAS OF EATING ASS
+
+935. ANGEL OF STREET JUSTICE
+
+936. CASOER THE TENACIOUS
+
+937. NAYA OF SURVIVING LIFE
+
+938. VIOLET OF MAGIC
+
+939. SUSAN OF THE DESERT REY
+
+940. KIRK OF JUSTICE + EQUALITY
+
+941. DANI OF FEMINISM
+
+942. MELISSA OF COLLECTIVE COMMUNITY
+39
+--- PAGE 40 ---
+943. DERRICK OF LOVE
+
+944. IAN, THE GODFATHER OF ULTRA HEAVY
+
+945. CORY, "NXT CHAMPION OF THE WORLD"
+
+946. JO THE LIFE LOVER
+
+947. FERGUS OF FRESH AIR
+
+948. KK OF THE PERFORMING ARTS
+
+949. SUKHDEV OF BLUEBOY
+
+950. COLLINS THE QUEEN OF HEAVEN
+
+951. INES OF NOT BEING A PIECE OF SHIT
+
+952. ADELE OF DANCEFLOOR
+
+953. PATRICK OF FACE
+
+954. SHAMEL OF ENERGY
+
+955. WES THE SEEDY MONSTER
+
+956. JARVA THE POET
+
+957. HONEY (IN THE CARE OF RILEY)
+
+958. SABINE OF LAUGHTER
+
+959. LILY OF ANIMAL RIGHTS
+
+960. RHIANNON OF HAIKU
+
+961. FRANK OF SLUT PRIDE
+
+962. KEITH OF IRISH REPUBLICANISM
+
+963. MAMA TRIED (AGAIN)
+
+964. STAR OF SPLITS
+
+965. JOHN OF NOWADAYS
+
+966. JAIME THE BOIKA
+
+967. HELENA HAUFF
+
+968. TREMAIN OF LIFE
+
+969. MYLO OF EMPATHY
+40
+--- PAGE 41 ---
+970. PHYSICAL THERAPY
+
+971. BEN OF BROKEN BEATS
+
+972. INTROSPEKT
+
+973. VIRGINA OF MARVELLA
+
+974. AUGUSTINE THE SAVAGE
+
+975. DEEPCHORD
+
+976. CHRIS OF RADICAL COMMUNITY
+
+977. MEL OF TATTOO
+
+978. HANNAH THE ETHEREAL
+
+979. DONNY THE DOCUMENTS GUY
+
+980. JON OF SUFFERINGLESSNESS
+
+981. 420 FRIENDLY
+
+982. MARQUIS OF THE RIGHT TO THE FREEDOM BE
+
+983. MERRAY OF JUSTICE & BEAUTY
+
+984. SAM OF VIBING IT OUT
+
+985. AINSEL OF PERCEPTION
+
+986. ZOE OF EARNEST NERDOM
+
+987. CODA OF DEVOTION
+
+988. SABINE, COUNTRY GOTHIC
+
+989. MARK OF E-GIRL
+
+990. ELIAS OF THE AVANT-GARDE
+
+991. BENITO OF GROWTH
+
+992. VANGUARD (IN THE CARE OF JOHN)
+
+993. DERYK OF INTROSPECTION
+
+994. IAN OF GENEROSITY
+
+995. ATARI OF LIFE
+
+996. IRIS OF CLEAR SIGHT
+41
+--- PAGE 42 ---
+997. COBRA CLUB
+
+998. KYLE OF THROWING THINGS THROUGH WINDOWS
+
+999. DESK
+
+The 999ights: 999_1-999_64 
+
+In an action of limitation, a series of 64 plights were set with a purple 999 on
+ their bottom face. These were plighted along with a question:
+ "What does the world need more of?"
+
+9991. DAVID SELF-REFLECTION
+
+9992. COMRADE CAV TIME TO CHILL
+
+9993. TAYLOR PEOPLE LIKE TAMMY
+
+9994. ALEX CYBERSOCIALISM
+
+9995. ADIAN: PEACE
+
+9996. KAREN: LOVE
+
+9997. JADA: LIGHT-HEARTED PEOPLE
+
+9998. AARON COMPASSION
+
+9999. DEVOYE CONNECTION, BALANCE, COMMUNICATION, AND UNDER-
+STANDING
+
+99910 ALI: THIS
+
+99911 MARE LESS ASSHOLES
+
+99912 JOSE ACCEPTANCE
+
+99913 VICK PEACE & LOVE
+
+99914 CHRIS: MAINTAINERS
+
+99915 REDEVOYED
+
+99916 PAULIE TRANS WOMEN
+
+99917. NICK GRACE
+
+99918 PHOEBE CLEAN SOIL
+
+99919. CLARA COOPERATION & ABSURDISM
+42
+--- PAGE 43 ---
+99920 YOSHIKO: ROCK BOTTOMS
+
+99921 IAN: LOVE
+
+99922 RENEE: JUSTICE
+
+99923. GISELLE COMMUNITY
+
+99924 JOSH COMPASSION
+
+999_25 EVE: PATIENCE
+
+999_26 ADITIYA CRITICAL THOUGHT
+
+999_27 STEVE MOVIE THEATERS
+
+99928 LORENZO: CEMENT
+
+99929 MARCO COMPASSION
+
+99930 KILOPATRAH: LOVE
+
+99931. KRISTINA: WATER
+
+99932. SAMUEL CAUSAL BUT INTENTIONAL LOVE
+
+99933 SEAN: LISTENING TO UNDERSTAND
+
+99934. MIKE (SERVITO): HUMANITY
+
+99935 JELANI: TOUGH LOVE
+
+99936 RON COMMUNITY
+
+99937 GHE: STILL
+
+999_38 KIRIN: LISTENING
+
+999_39 SENAIDA: GARDENING
+
+999_40 TÉA: CURIOSITY
+
+99941 OSCAR: COMMUNITY
+
+99942. CHARLOTTE: FUN
+
+999.43 PAUL SEX WORKERS
+This plight placed key to Earthly Delights, finding its way directly to
+ the hands of a sex worker.
+
+99944. TIERNAN COMPASSION
+
+99945 CONCRETE HUSBAND COMPASSION
+43
+--- PAGE 44 ---
+99946 TY: HONESTY
+
+99947. CHRISTIAN: JUSTICE
+
+99948. DJ MFA LESS PEOPLE
+
+99949. LORDIIE: LOVE
+
+99950 ELIO: KETAMINE
+
+99951 JADE BLAKE ACCEPTANCE
+
+99952 AVALON: PATIENCE
+
+99953 PHILIP: MELDING
+
+99954 EMILIA: TIME
+
+99955 ALEX: COMMUNITY
+
+99956 FILIPE: MUSIC
+
+99957. SHAUN ACCEPTANCE
+
+99958 SONNY: LOVE
+
+99959. TIM: SAFE SPACES
+
+99960 JOHN: TREES
+
+99961. CHRISTIAN: PEACE
+
+99962 JIWON: MAGIC
+
+99963 BENCE AUTHENTICITY
+
+99964. THEO PARRISH LIGHTERS IN CEMENT CUBES
+
+One Thousand: 1,000
+
+Plight 1,000 was set on the dancefloor of Dehanta on September 8th, 2024,
+ the first day of the 152th Pataphysical year.
+
+1000. BOXED
+EARTH
+2022
+now
+`; // End of pdfFullText placeholder
+
+        let allLedgerEntries = [];
+
+        function parseLedgerData(fullText) {
+            const entries = [];
+            let activeEntry = null;
+            const lines = fullText.split('\n');
+
+            const ignorePatterns = [
+                /^--- PAGE \d+ ---$/, /^The Ledger$/i, /^ERNST UNDING$/i,
+                /^First in Plight:/i, /^In Mundo:/i, /^The 999ights:/i, /^One Thousand:/i,
+                /^\s*$/ // Empty lines
+            ];
+            
+            const pageNumLinePattern = /^\s*[0-9]+\s*$/; // Matches lines that are only numbers (page numbers)
+
+            // Pre-processing to handle specific quoted formats and malformed lines
+            const processedLines = [];
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i];
+                let originalTrimmedLine = line.trim();
+
+                let match = originalTrimmedLine.match(/^"(\d+\.)","(.*)"$/); // "NUM.","TITLE"
+                if (match) {
+                    processedLines.push(match[1] + " " + match[2]);
+                    continue;
+                }
+
+                match = originalTrimmedLine.match(/^"(\d+\.)","(.*)$/); // "NUM.","TITLE_PART (no closing quote on this line)
+                if (match) {
+                    processedLines.push(match[1] + " " + match[2]); 
+                    let j = i + 1;
+                    while (j < lines.length) {
+                        const descLineTrimmed = lines[j].trim();
+                        if (descLineTrimmed === '"') { 
+                            i = j; 
+                            break;
+                        }
+                        // Only add non-empty description lines
+                        if (descLineTrimmed !== "") processedLines.push(lines[j]);
+                        j++;
+                        if (j === lines.length) { 
+                            i = j - 1;
+                        }
+                    }
+                    continue;
+                }
+                
+                if (originalTrimmedLine === '"48.') { 
+                    processedLines.push("48. "); 
+                    continue;
+                }
+                if (originalTrimmedLine.startsWith('49.","')) { 
+                    processedLines.push(originalTrimmedLine.replace('49.","', "49. "));
+                    continue;
+                }
+
+                const combinedEntryPattern = /^(\d+)-?\s*([A-Z].*)/i;
+                match = originalTrimmedLine.match(combinedEntryPattern);
+                if(match && !originalTrimmedLine.includes('.')) {
+                    const potentialNextLine = (i + 1 < lines.length) ? lines[i+1].trim() : "";
+                    if (potentialNextLine && /^[A-Z]/.test(potentialNextLine) && !potentialNextLine.match(/^(\d+)\./)) {
+                        processedLines.push(match[1] + ". " + potentialNextLine);
+                        i++; 
+                        continue;
+                    } else if (!match[2].match(/^(\d+)\./) && match[2].length > 3) {
+                        processedLines.push(match[1] + ". " + match[2]);
+                        continue;
+                    }
+                }
+
+                processedLines.push(line); 
+            }
+            
+            for (const lineContent of processedLines) {
+                const trimmedLine = lineContent.trim();
+                const lineForEntryMatch = lineContent.trimStart();
+
+                let isIgnoredLine = false;
+                for (const pattern of ignorePatterns) {
+                    if (pattern.test(trimmedLine)) {
+                        isIgnoredLine = true;
+                        break;
+                    }
+                }
+                if (isIgnoredLine) continue;
+
+                if (pageNumLinePattern.test(trimmedLine)) {
+                    const numVal = parseInt(trimmedLine);
+                    if (numVal > 0 && numVal < 60) {
+                        if (!activeEntry || (entries.length > 0 && entries[entries.length -1].id !== (activeEntry ? activeEntry.id : null))) {
+                           continue;
+                        }
+                    }
+                }
+                
+                const entryRegex = /^(\d+)\.\s*(.*)/; 
+                const entryMatch = entryRegex.exec(lineForEntryMatch);
+
+                if (entryMatch) {
+                    if (activeEntry) {
+                        activeEntry.description = (activeEntry.description || "").replace(/\s+/g, ' ').trim();
+                        if (activeEntry.id) entries.push(activeEntry); 
+                    }
+                    activeEntry = {
+                        id: entryMatch[1],
+                        title: entryMatch[2].trim(),
+                        description: ''
+                    };
+                } else if (activeEntry) {
+                    if (trimmedLine !== "" && trimmedLine !== '"') {
+                        activeEntry.description = ((activeEntry.description || "") + ' ' + lineContent.trim()).trim();
+                    }
+                }
+            }
+
+            if (activeEntry && activeEntry.id) {
+                activeEntry.description = (activeEntry.description || "").replace(/\s+/g, ' ').trim();
+                entries.push(activeEntry);
+            }
+            
+            const entry765index = entries.findIndex(e => e.id === "765");
+            if (entry765index !== -1 && entries[entry765index + 1] && entries[entry765index + 1].id === "765") {
+                if(entries[entry765index+1].description){
+                    entries[entry765index].description += (entries[entry765index].description ? " / " : "") + "JORDAN OF DEATH: " + entries[entry765index+1].description;
+                } else {
+                    entries[entry765index].description += (entries[entry765index].description ? " / " : "") + "JORDAN OF DEATH";
+                }
+                entries[entry765index].title += " / JORDAN OF DEATH";
+                entries.splice(entry765index + 1, 1);
+            }
+
+            return entries;
+        }
+
+
+        function displayEntries(entriesToDisplay, searchTerm = "") {
+            const container = document.getElementById('ledgerEntries');
+            container.innerHTML = '';
+
+            if (entriesToDisplay.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500">No entries found.</p>';
+                return;
+            }
+            
+            const searchRegex = searchTerm ? new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi') : null;
+
+            entriesToDisplay.forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'ledger-entry';
+
+                let idHTML = entry.id + '.';
+                let titleHTML = entry.title;
+                let descriptionHTML = entry.description || '';
+
+                if (searchTerm && searchRegex) {
+                    idHTML = entry.id.replace(searchRegex, match => `<span class="highlight">${match}</span>`) + '.';
+                }
+
+                if (searchTerm && searchRegex) {
+                    titleHTML = entry.title.replace(searchRegex, match => `<span class="highlight">${match}</span>`);
+                    if (entry.description) {
+                        descriptionHTML = entry.description.replace(searchRegex, match => `<span class="highlight">${match}</span>`);
+                    }
+                }
+                
+                const idEl = document.createElement('span');
+                idEl.className = 'entry-id';
+                idEl.innerHTML = idHTML;
+
+                const titleEl = document.createElement('span');
+                titleEl.className = 'entry-title';
+                titleEl.innerHTML = titleHTML;
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'flex items-baseline';
+                headerDiv.appendChild(idEl);
+                headerDiv.appendChild(titleEl);
+                entryDiv.appendChild(headerDiv);
+
+                if (entry.description) {
+                    const descriptionEl = document.createElement('p');
+                    descriptionEl.className = 'entry-description';
+                    descriptionEl.innerHTML = descriptionHTML;
+                    entryDiv.appendChild(descriptionEl);
+                }
+                container.appendChild(entryDiv);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            allLedgerEntries = parseLedgerData(pdfFullText);
+            displayEntries(allLedgerEntries);
+
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (!searchTerm) {
+                    displayEntries(allLedgerEntries);
+                    return;
+                }
+                const filteredEntries = allLedgerEntries.filter(entry => {
+                    return (entry.id && entry.id.toLowerCase().includes(searchTerm)) ||
+                           (entry.title && entry.title.toLowerCase().includes(searchTerm)) ||
+                           (entry.description && entry.description.toLowerCase().includes(searchTerm));
+                });
+                displayEntries(filteredEntries, searchTerm);
+            });
+        });
+
+    </script>
+</body>
+</html>
