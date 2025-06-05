@@ -31,10 +31,6 @@
         .entry-title {
             font-weight: bold;
         }
-        .entry-title.clickable {
-            cursor: pointer;
-            color: #000000; /* black */
-        }
         .entry-description {
             margin-top: 4px;
             font-size: 0.9em;
@@ -125,12 +121,8 @@ let allLedgerEntries = [];
                 idEl.innerHTML = idHTML;
 
                 const titleEl = document.createElement('span');
-                titleEl.className = 'entry-title clickable';
+                titleEl.className = 'entry-title';
                 titleEl.innerHTML = titleHTML;
-                titleEl.addEventListener('click', () => {
-                    const url = 'submit.html?id=' + encodeURIComponent(entry.id) + '&title=' + encodeURIComponent(entry.title);
-                    window.location.href = url;
-                });
                 
                 const headerDiv = document.createElement('div');
                 headerDiv.className = 'flex items-baseline';
