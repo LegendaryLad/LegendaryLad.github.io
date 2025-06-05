@@ -180,25 +180,79 @@ let allLedgerEntries = [];
             localStorage.setItem('ledgerStories', JSON.stringify(stories));
         }
 
-        function loadSubmissions() {
+                    descriptionEl.innerHTML = descriptionHTML;
+                    entryDiv.appendChild(descriptionEl);
+                }
+                container.appendChild(entryDiv);
+            });
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML;
+        }
+
+        function loadStories() {
             try {
-                return JSON.parse(localStorage.getItem('ledgerSubmissions') || '{}');
+                return JSON.parse(localStorage.getItem('ledgerStories') || '{}');
             } catch (e) {
                 return {};
             }
         }
 
-        function saveSubmissions(submissions) {
-            localStorage.setItem('ledgerSubmissions', JSON.stringify(submissions));
-            const blob = new Blob([JSON.stringify(submissions, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'ledger-submissions.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        function saveStories(stories) {
+            localStorage.setItem('ledgerStories', JSON.stringify(stories));
+        }
+
+        const GITHUB_CONFIG = {
+            owner: 'LegendaryLad', // Replace with your GitHub username
+            repo: 'LegendaryLad.github.io', // Repository name
+            path: 'SearchLedger/ledger-submissions.json', // File to store submissions
+            branch: 'main', // Branch to update
+            token: '' // Personal access token
+        };
+
+        async function uploadSubmission(entryId, text, timestamp) {
+            const { owner, repo, path, branch, token } = GITHUB_CONFIG;
+            const headers = {
+                'Accept': 'application/vnd.github+json'
+            };
+            if (token) headers['Authorization'] = `token ${token}`;
+
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+            let submissions = {};
+            let sha = undefined;
+            try {
+                const getRes = await fetch(apiUrl, { headers });
+                if (getRes.ok) {
+                    const data = await getRes.json();
+                    sha = data.sha;
+                    submissions = JSON.parse(atob(data.content));
+                }
+            } catch (e) {
+                // ignore fetch errors and start with empty submissions
+            }
+
+            if (!submissions[entryId]) submissions[entryId] = [];
+            submissions[entryId].push({ text, timestamp });
+
+            const body = {
+                message: `Add submission for ${entryId}`,
+                content: btoa(JSON.stringify(submissions, null, 2)),
+                sha,
+                branch
+            };
+
+            try {
+                await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers,
+                    body: JSON.stringify(body)
+                });
+            } catch (e) {
+                console.error('Failed to upload submission', e);
+            }
         }
 
 
@@ -243,15 +297,12 @@ let allLedgerEntries = [];
                 stories[entryId].push(text);
                 saveStories(stories);
 
-                const submissions = loadSubmissions();
-                if (!submissions[entryId]) submissions[entryId] = [];
                 const date = new Date();
                 const mm = String(date.getMonth() + 1).padStart(2, '0');
                 const dd = String(date.getDate()).padStart(2, '0');
                 const yyyy = date.getFullYear();
                 const timestamp = `${mm}/${dd}/${yyyy}`;
-                submissions[entryId].push({ text, timestamp });
-                saveSubmissions(submissions);
+                uploadSubmission(entryId, text, timestamp);
 
                 openSubmissionModal(entryId, entryTitle);
             });
