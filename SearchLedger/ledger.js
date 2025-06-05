@@ -5319,6 +5319,6 @@ const ledgerEntries =
   {
     "id": "1000",
     "title": "Boxed",
-    "description": "Earth 2022 \u0001 now"
+    "description": "End of part I."
   }
 ];
