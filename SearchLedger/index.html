@@ -180,10 +180,35 @@ let allLedgerEntries = [];
             localStorage.setItem('ledgerStories', JSON.stringify(stories));
         }
 
+        function loadSubmissions() {
+            try {
+                return JSON.parse(localStorage.getItem('ledgerSubmissions') || '{}');
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveSubmissions(submissions) {
+            localStorage.setItem('ledgerSubmissions', JSON.stringify(submissions));
+            const blob = new Blob([JSON.stringify(submissions, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ledger-submissions.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+
         function openSubmissionModal(entryId, entryTitle) {
             const modal = document.getElementById('submissionModal');
             modal.dataset.entryId = entryId;
-            document.getElementById('modalTitle').textContent = `${entryId}. ${entryTitle}`;
+            modal.dataset.entryTitle = entryTitle;
+            const formattedId = applySubindices(entryId + '.');
+            const formattedTitle = applySubindices(escapeHtml(entryTitle));
+            document.getElementById('modalTitle').innerHTML = `${formattedId} ${formattedTitle}`;
 
             const stories = loadStories();
             const entryStories = stories[entryId] || [];
@@ -209,13 +234,26 @@ let allLedgerEntries = [];
             document.getElementById('submitStory').addEventListener('click', () => {
                 const modal = document.getElementById('submissionModal');
                 const entryId = modal.dataset.entryId;
+                const entryTitle = modal.dataset.entryTitle;
                 const text = document.getElementById('storyInput').value.trim();
                 if (!text) return;
+
                 const stories = loadStories();
                 if (!stories[entryId]) stories[entryId] = [];
                 stories[entryId].push(text);
                 saveStories(stories);
-                openSubmissionModal(entryId, document.getElementById('modalTitle').textContent.replace(/^\d+\.\s*/, ''));
+
+                const submissions = loadSubmissions();
+                if (!submissions[entryId]) submissions[entryId] = [];
+                const date = new Date();
+                const mm = String(date.getMonth() + 1).padStart(2, '0');
+                const dd = String(date.getDate()).padStart(2, '0');
+                const yyyy = date.getFullYear();
+                const timestamp = `${mm}/${dd}/${yyyy}`;
+                submissions[entryId].push({ text, timestamp });
+                saveSubmissions(submissions);
+
+                openSubmissionModal(entryId, entryTitle);
             });
 
             const searchInput = document.getElementById('searchInput');
