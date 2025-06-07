@@ -5783,7 +5783,7 @@ const ledgerEntries =
   },
   {
     "id": "-93",
-    "title": "Sam of Mot**ē**",
+    "title": "Sam of Motē",
     "description": ""
   },
   {
