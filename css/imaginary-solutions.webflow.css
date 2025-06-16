@@ -384,7 +384,7 @@
 }
 
 .hero-wrapper-two {
-  max-width: 750px;
+  max-width: 100%;
   text-align: center;
   border: 1px #000;
   flex-direction: column;
