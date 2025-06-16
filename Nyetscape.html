@@ -72,11 +72,26 @@
       font-size: 1rem;
       line-height: 1;
     }
+
+    /* Black shimmer effect from marginary page */
+    .black-shimmer {
+      color: #000;
+      text-decoration: none;
+      animation: black-shimmer 2s ease-in-out infinite;
+    }
+    @keyframes black-shimmer {
+      0%, 100% {
+        text-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+      }
+      50% {
+        text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+      }
+    }
   </style>
 </head>
 <body>
   <div class="toc">
-    <div class="title"><a href="https://imaginary.solutions/documents/Bounds.pdf">Uncertainties in Nyetology</a></div>
+    <div class="title"><a href="https://imaginary.solutions/documents/Bounds.pdf" class="black-shimmer">Uncertainties in Nyetology</a></div>
 
     <h2>Preamble</h2>
 
