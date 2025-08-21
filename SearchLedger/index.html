@@ -101,6 +101,7 @@ let allLedgerEntries = [];
             entriesToDisplay.forEach(entry => {
                 const entryDiv = document.createElement('div');
                 entryDiv.className = 'ledger-entry';
+                entryDiv.id = `entry-${entry.id}`;
 
                 let idHTML = entry.id + '.';
                 let titleHTML = entry.title;
@@ -174,88 +175,54 @@ let allLedgerEntries = [];
             });
         }
 
-
-
-        function renderComments(ref) {
-            const commentList = document.getElementById('commentList');
-            if (!commentList) return;
-            commentList.innerHTML = '';
-            const comments = JSON.parse(localStorage.getItem(`comments-${ref}`) || '[]');
-            comments.forEach(text => {
-                const li = document.createElement('li');
-                li.textContent = text;
-                commentList.appendChild(li);
-            });
+        function scrollToEntry(ref) {
+            const el = document.getElementById(`entry-${ref}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'auto', block: 'center' });
+                updateLedgerVisuals();
+            }
         }
 
-        function showCommentSection(ref) {
-            const container = document.getElementById('ledgerEntries');
-            const commentDiv = document.createElement('div');
-            commentDiv.className = 'mt-4';
-            commentDiv.innerHTML = `
-                <h2 class="font-bold mb-2">Comments</h2>
-                <ul id="commentList" class="mb-4 list-disc pl-5"></ul>
-                <form id="commentForm" class="flex flex-col space-y-2">
-                    <textarea id="commentInput" class="border p-2" placeholder="Add a comment..."></textarea>
-                    <button type="submit" class="bg-black text-white px-4 py-2">Submit</button>
-                </form>
-            `;
-            container.appendChild(commentDiv);
-
-            const form = commentDiv.querySelector('#commentForm');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const input = commentDiv.querySelector('#commentInput');
-                const text = input.value.trim();
-                if (!text) return;
-                const comments = JSON.parse(localStorage.getItem(`comments-${ref}`) || '[]');
-                comments.push(text);
-                localStorage.setItem(`comments-${ref}`, JSON.stringify(comments));
-                input.value = '';
-                renderComments(ref);
-            });
-
-            renderComments(ref);
-        }
 
         function handleRefToken() {
             const params = new URLSearchParams(window.location.search);
             const ref = params.get('ref');
             const token = params.get('token');
-            if (!ref || !token) return false;
 
-            const entry = ledgerEntries.find(e => e.id === ref);
-            if (!entry) {
-                displayEntries([]);
-                return true;
+            if (ref && token && hasValidToken(ref, token)) {
+                localStorage.setItem(`token-${ref}`, token);
             }
-            displayEntries([entry]);
-            if (hasValidToken(ref, token)) {
-                showCommentSection(ref);
+
+            if (ref || token) {
+                history.replaceState(null, '', window.location.pathname);
             }
-            return true;
+
+            return ref;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             allLedgerEntries = ledgerEntries.slice();
 
-            if (!handleRefToken()) {
-                displayEntries(allLedgerEntries);
+            const ref = handleRefToken();
+            displayEntries(allLedgerEntries);
 
-                const searchInput = document.getElementById('searchInput');
-                searchInput.addEventListener('input', (e) => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    if (!searchTerm) {
-                        displayEntries(allLedgerEntries);
-                        return;
-                    }
-                    const filteredEntries = allLedgerEntries.filter(entry => {
-                        return (entry.id && entry.id.toLowerCase().includes(searchTerm)) ||
-                               (entry.title && entry.title.toLowerCase().includes(searchTerm)) ||
-                               (entry.description && entry.description.toLowerCase().includes(searchTerm));
-                    });
-                    displayEntries(filteredEntries, searchTerm);
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (!searchTerm) {
+                    displayEntries(allLedgerEntries);
+                    return;
+                }
+                const filteredEntries = allLedgerEntries.filter(entry => {
+                    return (entry.id && entry.id.toLowerCase().includes(searchTerm)) ||
+                           (entry.title && entry.title.toLowerCase().includes(searchTerm)) ||
+                           (entry.description && entry.description.toLowerCase().includes(searchTerm));
                 });
+                displayEntries(filteredEntries, searchTerm);
+            });
+
+            if (ref) {
+                setTimeout(() => scrollToEntry(ref), 100);
             }
             setTimeout(updateLedgerVisuals, 100);
         });
