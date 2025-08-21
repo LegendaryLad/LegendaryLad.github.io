@@ -1,0 +1,8 @@
+{
+  "name": "LegendaryLad.github.io",
+  "version": "1.0.0",
+  "description": "Static site for imaginary.solutions",
+  "scripts": {
+    "test": "echo \"No tests defined\" && exit 0"
+  }
+}
