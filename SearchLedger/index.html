@@ -186,14 +186,29 @@ let allLedgerEntries = [];
 
         function handleRefToken() {
             const params = new URLSearchParams(window.location.search);
-            const ref = params.get('ref');
+            let ref = params.get('ref');
             const token = params.get('token');
 
             if (ref && token && hasValidToken(ref, token)) {
                 localStorage.setItem(`token-${ref}`, token);
+            } else if (token && !ref) {
+                for (const [id, tokens] of Object.entries(entryTokens)) {
+                    if (tokens.includes(token)) {
+                        ref = id;
+                        localStorage.setItem(`token-${id}`, token);
+                        break;
+                    }
+                }
+            } else if (ref && token === null) {
+                const storedToken = localStorage.getItem(`token-${ref}`);
+                if (!storedToken || !hasValidToken(ref, storedToken)) {
+                    ref = null;
+                }
+            } else {
+                ref = null;
             }
 
-            if (ref || token) {
+            if (params.get('ref') || params.get('token')) {
                 history.replaceState(null, '', window.location.pathname);
             }
 
