@@ -6995,55 +6995,55 @@ const ledgerEntries =
     "id": "-334",
     "title": "Awaiting...",
     "description": ""
-  }
+  },
   {
     "id": "-335",
     "title": "Awaiting...",
     "description": ""
-  }
+  },
   {
     "id": "-336",
     "title": "Awaiting...",
     "description": ""
-  }
+  },
   {
     "id": "-337",
     "title": "Awaiting...",
     "description": ""
-  } 
+  },
   {
     "id": "-338",
     "title": "Awaiting...",
     "description": ""
-  }
+  },
   {
     "id": "-339",
     "title": "Awaiting...",
     "description": ""
-  } 
+  },
   {
     "id": "-340",
     "title": "Awaiting...",
     "description": ""
-  }
+  },
   {
     "id": "-341",
     "title": "Awaiting...",
     "description": ""
-  } 
+  },
   {
     "id": "-342",
     "title": "Awaiting...",
     "description": ""
-  } 
+  },
   {
     "id": "-343",
     "title": "Awaiting...",
     "description": ""
-  }
+  },
   {
     "id": "-344",
     "title": "Awaiting...",
     "description": ""
-  } 
+  }
 ]
