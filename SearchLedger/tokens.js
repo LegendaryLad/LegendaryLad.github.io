@@ -28,7 +28,7 @@ const entryTokens = {
   "-357": ["armload"],
   "-358": ["bedrock"],
   "-359": ["chilled"],
-  "-360": ["dawning"],
+  "-360": ["dawning"]
 };
 
 function hasValidToken(ref, token) {
