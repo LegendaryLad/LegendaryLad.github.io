@@ -4,6 +4,21 @@
 <head>
   <meta charset="utf-8">
   <title>Imaginary</title>
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get('ref');
+      const token = params.get('token');
+      if (ref) {
+        if (token) {
+          try {
+            localStorage.setItem(`token-${ref}`, token);
+          } catch (e) {}
+        }
+        window.location.replace(`SearchLedger/?ref=${encodeURIComponent(ref)}`);
+      }
+    })();
+  </script>
   <meta content="Imaginary" property="og:title">
   <meta content="Imaginary" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
