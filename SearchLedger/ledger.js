@@ -7045,7 +7045,7 @@ const ledgerEntries =
     "id": "-344",
     "title": "Awaiting...",
     "description": ""
-  }
+  },
   {
     "id": "-345",
     "title": "Awaiting...",
