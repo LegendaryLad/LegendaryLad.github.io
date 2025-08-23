@@ -215,10 +215,10 @@ let allLedgerEntries = [];
             return ref;
         }
 
+        const initialRef = handleRefToken();
+
         document.addEventListener('DOMContentLoaded', () => {
             allLedgerEntries = ledgerEntries.slice();
-
-            const ref = handleRefToken();
             displayEntries(allLedgerEntries);
 
             const searchInput = document.getElementById('searchInput');
@@ -236,8 +236,8 @@ let allLedgerEntries = [];
                 displayEntries(filteredEntries, searchTerm);
             });
 
-            if (ref) {
-                setTimeout(() => scrollToEntry(ref), 100);
+            if (initialRef) {
+                setTimeout(() => scrollToEntry(initialRef), 100);
             }
             setTimeout(updateLedgerVisuals, 100);
         });
