@@ -6988,8 +6988,8 @@ const ledgerEntries =
   },
   {
     "id": "-333",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "T4T4T",
+    "description": "System Activated"
   },
   {
     "id": "-334",
