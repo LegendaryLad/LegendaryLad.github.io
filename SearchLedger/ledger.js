@@ -7014,12 +7014,12 @@ const ledgerEntries =
   {
     "id": "-338",
     "title": "System/Activate Activation",
-    "description": ""
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-339",
     "title": "System/Activate Activation",
-    "description": ""
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-340",
@@ -7028,42 +7028,47 @@ const ledgerEntries =
   },
   {
     "id": "-341",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-342",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-343",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-344",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-345",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-346",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-347",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
   },
   {
     "id": "-348",
-    "title": "Awaiting...",
-    "description": ""
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
+  },
+  {
+    "id": "-349",
+    "title": "System/Activate Activation",
+    "description": "Email me at act@imaginary.solutions if you claimed."
   }
 ]
